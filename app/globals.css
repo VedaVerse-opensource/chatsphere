@@ -31,3 +31,179 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Home Page styles */
+
+.light-mode {
+  background-color: #fff;
+}
+
+.dark-mode {
+  background-color: #333;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5vh 4vw;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3vh;
+  width: 100%;
+}
+
+.logo {
+  width: 20vw;
+  height: auto;
+  margin-right: 2vw;
+}
+
+.title-text {
+  font-size: 10vw;
+  color: #ff4949;
+  font-family: "Inder", sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dark-mode .title-text {
+  color: #fff;
+}
+
+/* Prompt styles */
+
+.prompt-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.response-text {
+  width: 60%;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #333;
+}
+
+.prompt {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 10px;
+  margin-bottom: 40px;
+}
+
+.prompt-box {
+  display: flex;
+  flex-direction: row;
+  width: 85%;
+  background-color: #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+  background-color: transparent;
+  padding: 12px;
+  font-size: 18px;
+  color: #333;
+  border: none;
+  outline: none;
+}
+
+.send-button {
+  margin-left: 10px;
+  background-color: #ff385c;
+  padding: 10px;
+  border-radius: 10px;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+/* Cards styles */
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2% 0; /* 2% of screen height as margin */
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 2%; /* 2% of screen height as margin */
+}
+
+.card {
+  border: 1px solid #f08080;
+  border-radius: 10px;
+  padding: 2%;
+  width: 45%;
+  aspect-ratio: 1.6; /* Maintain consistent aspect ratio */
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-text {
+  font-size: 3vw; /* 3% of screen width */
+  color: #333;
+  text-align: center;
+}
+
+/* Navbar styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  /* background-color: $ {
+    isdarkmode? "#333" : "#fff";
+  } */
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode {
+  background-color: #333;
+}
+
+.left-section,
+.right-section {
+  display: flex;
+  align-items: center;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.icon-button:last-child {
+  margin-right: 0;
+}
