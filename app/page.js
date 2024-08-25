@@ -3,22 +3,25 @@ import Image from "next/image";
 // import { useColorScheme } from "@/hooks/useColorScheme";
 import Prompt from "@/components/Prompt";
 import Cards from "@/components/Cards";
-import Logo from "@/components/svgs/Logo";
+import Navbar from "@/components/Navbar";
 
 const Home = () => {
-  // const colorScheme = useColorScheme();
-  // const isDarkMode = colorScheme === "dark";
-
   return (
-    <div className={"light-mode"}>
-      <div className='container'>
-        <div className='title'>
-          <Logo className='logo' />
-          <h1 className='title-text'>ChatSphere</h1>
-        </div>
-        <Prompt />
-        <Cards />
+    <div className="container px-4 pb-8 flex flex-col justify-start">
+      <div className="flex items-center justify-center ">
+        <Image
+          src="/icons/logo.svg"
+          alt="ChatSphere logo"
+          width="80"
+          height="80"
+          className="mr-6"
+        />
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
+          ChatSphere
+        </h1>
       </div>
+      <Prompt />
+      <Cards />
     </div>
   );
 };

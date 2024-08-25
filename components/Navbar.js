@@ -1,6 +1,7 @@
+"use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import DropdownComponent from "./Dropdown";
 import {
   IoMenu,
@@ -11,7 +12,6 @@ import {
   IoStarOutline,
   IoPersonCircleOutline,
 } from "react-icons/io5";
-import newchatImage from "../../assets/images/file.svg";
 
 const Navbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -32,53 +32,64 @@ const Navbar = () => {
   };
 
   return (
-    <div className={`navbar ${isDarkMode ? "dark-mode" : ""}`}>
-      <div className='left-section'>
-        <button className='icon-button' onClick={() => router.push("/")}>
-          <IoMenu size={24} color={isDarkMode ? "white" : "black"} />
-        </button>
-        <Image src={newchatImage} alt='New Chat' width={24} height={24} />
-        <DropdownComponent
-          data={data}
-          placeholder={selectedModel}
-          onSelect={handleModelChange}
-          isDarkMode={isDarkMode}
-        />
+    <nav
+      className={`bg-background-light dark:bg-background-dark ${
+        isDarkMode ? "dark" : ""
+      }`}>
+      <div className="max-w-7xl mx-auto px-2">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center space-x-4">
+            <button
+              className="text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-2 rounded-full"
+              onClick={() => router.push("/")}>
+              <IoMenu size={24} />
+            </button>
+            <Image
+              src="/icons/file.svg"
+              alt="New Chat"
+              width={24}
+              height={24}
+              className="text-secondary dark:text-quaternary"
+            />
+            <div className="hidden sm:block w-56 lg:w-64">
+              <DropdownComponent
+                data={data}
+                placeholder={selectedModel}
+                onSelect={handleModelChange}
+                isDarkMode={isDarkMode}
+              />
+            </div>
+          </div>
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <NavButton icon={<IoDocumentTextOutline size={20} />} />
+            <NavButton icon={<IoShareOutline size={20} />} />
+            <NavButton
+              icon={
+                isDarkMode ? (
+                  <IoSunnyOutline size={20} />
+                ) : (
+                  <IoMoonOutline size={20} />
+                )
+              }
+              onClick={() => setIsDarkMode(!isDarkMode)}
+            />
+            <NavButton icon={<IoStarOutline size={20} />} />
+            <button className="text-primary hover:text-primary/80 transition-colors p-1 rounded-full">
+              <IoPersonCircleOutline size={32} />
+            </button>
+          </div>
+        </div>
       </div>
-      <div className='right-section'>
-        <button className='icon-button'>
-          <IoDocumentTextOutline
-            size={24}
-            color={isDarkMode ? "white" : "black"}
-          />
-        </button>
-        <button className='icon-button'>
-          <IoShareOutline size={24} color={isDarkMode ? "white" : "black"} />
-        </button>
-        <button
-          className='icon-button'
-          onClick={() => setIsDarkMode(!isDarkMode)}
-        >
-          {isDarkMode ? (
-            <IoSunnyOutline size={24} color='white' />
-          ) : (
-            <IoMoonOutline size={24} color='black' />
-          )}
-        </button>
-        <button className='icon-button'>
-          <IoStarOutline size={24} color={isDarkMode ? "white" : "black"} />
-        </button>
-        <button className='icon-button'>
-          <IoPersonCircleOutline
-            size={40}
-            color={isDarkMode ? "white" : "#989cff"}
-          />
-        </button>
-      </div>
-
-      <style jsx>{``}</style>
-    </div>
+    </nav>
   );
 };
+
+const NavButton = ({ icon, onClick }) => (
+  <button
+    className="text-secondary hover:text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-2 rounded-full"
+    onClick={onClick}>
+    {icon}
+  </button>
+);
 
 export default Navbar;
