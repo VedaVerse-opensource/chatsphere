@@ -18,11 +18,11 @@ const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
       borderColor: "transparent",
       minHeight: "50px",
       borderRadius: "8px",
-      boxShadow: "none", // Remove focus ring
+      boxShadow: "none",
       "&:hover": {
         borderColor: "transparent",
       },
-      cursor: "pointer", // Change cursor to pointer
+      cursor: "pointer",
     }),
     placeholder: (base) => ({
       ...base,
@@ -48,14 +48,14 @@ const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
         ? "#333"
         : "white",
       color: isDarkMode ? "white" : "black",
-      cursor: "pointer", // Change cursor to pointer for options
+      cursor: "pointer",
     }),
     dropdownIndicator: (base) => ({
       ...base,
-      cursor: "pointer", // Change cursor to pointer for dropdown indicator
+      cursor: "pointer",
     }),
     indicatorSeparator: () => ({
-      display: "none", // Remove the indicator separator
+      display: "none",
     }),
   };
 
@@ -67,9 +67,9 @@ const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
         value={selectedOption}
         placeholder={placeholder}
         onChange={handleChange}
-        isSearchable={false} // Disable search functionality
-        isClearable={false} // Remove the clear (x) option
-        className="focus:outline-none" // Remove focus outline
+        isSearchable={true}
+        isClearable={false}
+        className="focus:outline-none"
         classNamePrefix="react-select"
       />
     </div>
