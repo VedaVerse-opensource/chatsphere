@@ -5,8 +5,32 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+
   theme: {
     extend: {
+      colors: {
+        primary: {
+          DEFAULT: "#ff1d46", // New highlight color for buttons and important components
+        },
+        secondary: {
+          DEFAULT: "#444444", // New color for accents and dark theme background
+        },
+        tertiary: {
+          DEFAULT: "#d9d9d9", // New color for chat bubbles, side menu, etc.
+        },
+        quaternary: {
+          DEFAULT: "#fffafb", // New color for cards, etc.
+        },
+        background: {
+          light: "#ffffff", // New light theme background color
+          dark: "#444444", // New dark theme background color (same as secondary)
+        },
+        text: {
+          light: "#000000", // Using secondary color for light mode text
+          DEFAULT: "#000000", // Using secondary color for default text
+          dark: "#ffffff", // Using light background color for dark mode text
+        },
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -15,4 +39,5 @@ module.exports = {
     },
   },
   plugins: [],
+  darkMode: "class",
 };
