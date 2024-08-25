@@ -9,12 +9,12 @@ const cardsData = [
 
 const Cards = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 w-full max-w-6xl">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mt-12 w-full max-w-6xl">
       {cardsData.map((text, index) => (
         <div
           key={index}
-          className="bg-quaternary dark:bg-secondary rounded-lg w-[80%] border border-red-200 p-6 hover:shadow-lg transition-shadow duration-300">
-          <p className="text-secondary dark:text-quaternary">{text}</p>
+          className="bg-quaternary dark:bg-secondary rounded-2xl w-[70%] border border-red-200 p-6 hover:shadow-lg transition-shadow duration-300">
+          <p className="text-secondary text-sm dark:text-quaternary">{text}</p>
         </div>
       ))}
     </div>
