@@ -1,13 +1,26 @@
 "use client";
 import React, { useState } from "react";
 import groqResponse from "../scripts/groq";
+import {
+  gpt4Response,
+  gpt4oResponse,
+  gpt4oMiniResponse,
+  gpt35TurboResponse,
+} from "../scripts/chatgpt";
+// import dalleResponse from "../scripts/dalle";
+import {
+  gemini15ProResponse,
+  gemini15FlashResponse,
+  gemini10ProResponse,
+} from "../scripts/gemini";
 
 const Mic = () => (
   <svg
     className="w-6 h-6 text-secondary dark:text-quaternary"
     fill="none"
     viewBox="0 0 24 24"
-    stroke="currentColor">
+    stroke="currentColor"
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -22,7 +35,8 @@ const Attach = () => (
     className="w-6 h-6 text-secondary dark:text-quaternary"
     fill="none"
     viewBox="0 0 24 24"
-    stroke="currentColor">
+    stroke="currentColor"
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -37,7 +51,8 @@ const Send = () => (
     className="w-6 h-6 text-quaternary"
     fill="none"
     viewBox="0 0 24 24"
-    stroke="currentColor">
+    stroke="currentColor"
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -47,14 +62,58 @@ const Send = () => (
   </svg>
 );
 
-const Prompt = () => {
+const Prompt = ({ selectedModel }) => {
   const [inputText, setInputText] = useState("");
   const [apiResponse, setApiResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSend = async () => {
-    const content = await groqResponse(inputText);
-    setApiResponse(content);
-    setInputText("");
+    if (!inputText.trim()) return;
+
+    setIsLoading(true);
+    let content;
+    try {
+      switch (selectedModel) {
+        case "groq":
+          content = await groqResponse(inputText);
+          break;
+        case "gpt-4o":
+          content = await gpt4oResponse(inputText);
+          break;
+        case "gpt-4":
+          content = await gpt4Response(inputText);
+          break;
+        case "gpt-4o-mini":
+          content = await gpt4oMiniResponse(inputText);
+          break;
+        case "gpt-3.5-turbo":
+          content = await gpt35TurboResponse(inputText);
+          break;
+        case "dalle":
+          content = await dalleResponse(inputText);
+          break;
+        case "gemini-1.5-pro":
+          content = await gemini15ProResponse(inputText);
+          break;
+        case "gemini-1.5-flash":
+          content = await gemini15FlashResponse(inputText);
+          break;
+        case "gemini-1.0-pro":
+          content = await gemini10ProResponse(inputText);
+          break;
+        default:
+          content = "Unsupported model selected";
+      }
+      setApiResponse(content);
+    } catch (error) {
+      console.error("Error fetching response:", error);
+      setApiResponse(
+        "An error occurred while fetching the response. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+      setInputText("");
+    }
   };
 
   return (
@@ -77,6 +136,9 @@ const Prompt = () => {
               placeholder="Explore with ChatSphere"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") handleSend();
+              }}
             />
             <button className="ml-4 hover:text-primary transition-colors">
               <Attach />
@@ -84,9 +146,13 @@ const Prompt = () => {
           </div>
         </div>
         <button
-          className="bg-primary hover:bg-primary/80 text-quaternary rounded-xl p-4 transition-colors"
-          onClick={handleSend}>
-          <Send />
+          className={`bg-primary hover:bg-primary/80 text-quaternary rounded-xl p-4 transition-colors ${
+            isLoading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          onClick={handleSend}
+          disabled={isLoading}
+        >
+          {isLoading ? "Sending..." : <Send />}
         </button>
       </div>
     </div>
