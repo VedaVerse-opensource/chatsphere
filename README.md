@@ -5,6 +5,7 @@
 <h1 align="center">ChatSphere</h1>
 
 ChatSphere is an innovative AI-powered search engine designed to revolutionize the way users interact with information. Unlike traditional search engines, ChatSphere integrates multiple Large Language Models (LLMs), providing users with the flexibility to choose the AI that best suits their needs for any given query. 
+
 This repository is for the web version of ChatSphere, which plans to use IndexedDB as the database. Additionally, all primary colors are defined in the Tailwind configuration file to maintain design consistency.
 
 **Key Features**:
