@@ -1,27 +1,40 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
-// import { useColorScheme } from "@/hooks/useColorScheme";
 import Prompt from "@/components/Prompt";
 import Cards from "@/components/Cards";
 import Navbar from "@/components/Navbar";
 
 const Home = () => {
+  const [isChatActive, setIsChatActive] = useState(false);
+
   return (
-    <div className="container px-4 pb-8 flex flex-col justify-start">
-      <div className="flex items-center justify-center ">
-        <Image
-          src="/icons/logo.svg"
-          alt="ChatSphere logo"
-          width="80"
-          height="80"
-          className="mr-6"
+    <div className="flex-grow container mx-auto px-4 flex flex-col">
+      {!isChatActive && (
+        <>
+          <div className="flex items-center justify-center mt-8">
+            <Image
+              src="/icons/logo.svg"
+              alt="ChatSphere logo"
+              width="100"
+              height="100"
+              className="mr-6"
+            />
+            <h1 className="text-6xl sm:text-5xl md:text-6xl font-bold text-primary">
+              ChatSphere
+            </h1>
+          </div>
+          <div className="flex-grow flex flex-col justify-center items-center mt-12">
+            <Cards />
+          </div>
+        </>
+      )}
+      <div className=" w-full h-full px-2 sm:px-4 md:px-8 lg:px-16">
+        <Prompt
+          chatActive={isChatActive}
+          onChatStart={() => setIsChatActive(true)}
         />
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
-          ChatSphere
-        </h1>
       </div>
-      <Prompt />
-      <Cards />
     </div>
   );
 };
