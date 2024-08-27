@@ -20,7 +20,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`bg-background-light dark:bg-background-dark ${
+      className={`bg-background-light sticky top-0 dark:bg-background-dark ${
         isDarkMode ? "dark" : ""
       }`}
     >

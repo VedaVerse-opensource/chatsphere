@@ -19,10 +19,10 @@ module.exports = {
           DEFAULT: "#d9d9d9", // New color for chat bubbles, side menu, etc.
         },
         quaternary: {
-          DEFAULT: "#fffafb", // New color for cards, etc.
+          DEFAULT: "#eee9ea", // New color for cards, etc.
         },
         background: {
-          light: "#ffffff", // New light theme background color
+          light: "#efefef", // New light theme background color
           dark: "#444444", // New dark theme background color (same as secondary)
         },
         text: {
