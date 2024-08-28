@@ -1,14 +1,14 @@
 import Groq from "groq-sdk";
 
 const groq = new Groq({
-  apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY,
+  apiKey: localStorage.getItem("groqApiKey"),
   dangerouslyAllowBrowser: true,
 });
 
 async function groqResponse(content, context) {
   try {
     // Convert context object to an array of messages
-    const contextMessages = Object.values(context).map((response) => ({
+    const contextMessages = Object.values(context).map(response => ({
       role: response.type === "user" ? "user" : "assistant",
       content: response.text,
     }));

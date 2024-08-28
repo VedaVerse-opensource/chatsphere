@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DropdownComponent from "./Dropdown";
+import ApiKeyDialog from "./ApiKeyDialog";
 import {
   IoMenu,
   IoDocumentTextOutline,
@@ -15,10 +16,9 @@ import {
 
 const Navbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
   const [selectedModel, setSelectedModel] = useState("Groq - Llama 70b");
-  const [isChatActive, setIsChatActive] = useState(false);
 
   const data = [
     { label: "Groq - Llama 70b", value: "groq" },
@@ -32,8 +32,16 @@ const Navbar = () => {
     { label: "Gemini 1.0 Pro", value: "gemini-1.0-pro" },
   ];
 
-  const handleModelChange = (value) => {
+  const handleModelChange = value => {
     setSelectedModel(value);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleAvatarClick = () => {
+    setIsDialogOpen(true);
   };
 
   return (
@@ -80,12 +88,17 @@ const Navbar = () => {
               onClick={() => setIsDarkMode(!isDarkMode)}
             />
             <NavButton icon={<IoStarOutline size={20} />} />
-            <button className='text-primary hover:text-primary/80 transition-colors p-1 rounded-full'>
+            <button
+              className='text-primary hover:text-primary/80 transition-colors p-1 rounded-full'
+              onClick={handleAvatarClick}
+            >
               <IoPersonCircleOutline size={32} />
             </button>
           </div>
         </div>
       </div>
+
+      <ApiKeyDialog isOpen={isDialogOpen} onClose={handleDialogClose} />
     </nav>
   );
 };

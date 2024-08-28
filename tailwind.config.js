@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#ff1d46", // New highlight color for buttons and important components
+          DEFAULT: "#e73529", // New highlight color for buttons and important components
         },
         secondary: {
           DEFAULT: "#444444", // New color for accents and dark theme background
