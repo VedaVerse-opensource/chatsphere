@@ -33,11 +33,11 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
     setInputText("");
 
     const updatedContext = { ...context, [responses.length]: newUserResponse };
-
+    console.log(selectedModel);
     let content;
     try {
       switch (selectedModel) {
-        case "groq":
+        case "Groq - Llama 70b":
           content = await groqResponse(inputText, updatedContext);
           break;
         case "gpt-4o":
