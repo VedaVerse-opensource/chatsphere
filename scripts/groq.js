@@ -1,31 +1,26 @@
 import Groq from "groq-sdk";
+import { useEffect, useState } from "react";
 
-let key;
-if (typeof window !== undefined) {
-  key = localStorage.getItem("groqApiKey");
+let groq;
+
+if (typeof window !== "undefined") {
+  const key = localStorage.getItem("groqApiKey");
+  groq = new Groq({
+    apiKey: key,
+    dangerouslyAllowBrowser: true,
+  });
 }
 
-const groq = new Groq({
-  apiKey: key,
-  dangerouslyAllowBrowser: true,
-});
-
 async function groqResponse(content, context) {
+  if (!groq) return "Groq SDK not initialized";
+
   try {
-    // Convert context object to an array of messages
     const contextMessages = Object.values(context).map(response => ({
       role: response.type === "user" ? "user" : "assistant",
       content: response.text,
     }));
 
-    // Add the new user message
-    const messages = [
-      ...contextMessages,
-      {
-        role: "user",
-        content: content,
-      },
-    ];
+    const messages = [...contextMessages, { role: "user", content: content }];
 
     const chatCompletion = await groq.chat.completions.create({
       messages: messages,

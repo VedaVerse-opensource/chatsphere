@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Dialog from "./Dialog";
 
 const ApiKeyDialog = ({ isOpen, onClose }) => {
@@ -7,10 +7,15 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
   const [geminiKey, setGeminiKey] = useState("");
 
   useEffect(() => {
+    // Check if we're in a browser environment
     if (typeof window !== "undefined") {
-      setGroqKey(localStorage.getItem("groqApiKey") || "");
-      setOpenAiKey(localStorage.getItem("openAiApiKey") || "");
-      setGeminiKey(localStorage.getItem("geminiApiKey") || "");
+      const storedGroqKey = localStorage.getItem("groqApiKey");
+      const storedOpenAiKey = localStorage.getItem("openAiApiKey");
+      const storedGeminiKey = localStorage.getItem("geminiApiKey");
+
+      if (storedGroqKey) setGroqKey(storedGroqKey);
+      if (storedOpenAiKey) setOpenAiKey(storedOpenAiKey);
+      if (storedGeminiKey) setGeminiKey(storedGeminiKey);
     }
   }, []);
 
@@ -29,30 +34,22 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
     <Dialog onClose={onClose}>
       <div className='p-4'>
         <h2 className='text-xl font-semibold mb-6'>Set API Keys</h2>
-
-        {["Groq", "OpenAI", "Gemini"].map((keyName, index) => (
-          <div className='mb-4 flex items-center' key={index}>
+        {/* Render the input fields for each API key */}
+        {[
+          { label: "Groq API Key", value: groqKey, onChange: setGroqKey },
+          { label: "OpenAI API Key", value: openAiKey, onChange: setOpenAiKey },
+          { label: "Gemini API Key", value: geminiKey, onChange: setGeminiKey },
+        ].map(({ label, value, onChange }) => (
+          <div key={label} className='mb-4 flex items-center'>
             <label className='w-1/3 text-sm font-medium text-gray-700 dark:text-gray-200'>
-              {keyName} API Key
+              {label}
             </label>
             <input
               type='text'
-              value={
-                keyName === "Groq"
-                  ? groqKey
-                  : keyName === "OpenAI"
-                  ? openAiKey
-                  : geminiKey
-              }
-              onChange={e =>
-                keyName === "Groq"
-                  ? setGroqKey(e.target.value)
-                  : keyName === "OpenAI"
-                  ? setOpenAiKey(e.target.value)
-                  : setGeminiKey(e.target.value)
-              }
+              value={value}
+              onChange={e => onChange(e.target.value)}
               className='flex-grow p-2 border rounded-md bg-white dark:bg-gray-800 dark:border-gray-700 text-black'
-              placeholder={`Enter your ${keyName} API key`}
+              placeholder={`Enter your ${label}`}
             />
             <button
               className='ml-4 bg-primary text-white px-4 py-2 rounded-md'

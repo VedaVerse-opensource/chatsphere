@@ -1,16 +1,27 @@
+"use client";
+
 import OpenAI from "openai";
 
-let key;
-if (typeof window !== undefined) {
-  key = localStorage.getItem("openAiApiKey");
+let openai;
+
+// Initialize OpenAI SDK on the client side
+if (typeof window !== "undefined") {
+  const key = localStorage.getItem("openAiApiKey");
+
+  if (key) {
+    openai = new OpenAI({
+      apiKey: key,
+      dangerouslyAllowBrowser: true,
+    });
+  }
 }
 
-const openai = new OpenAI({
-  apiKey: key,
-  dangerouslyAllowBrowser: true,
-});
-
 async function chatGPTResponse(content, model) {
+  if (!openai) {
+    console.error("OpenAI SDK is not initialized. Please check your API key.");
+    return "OpenAI SDK not initialized.";
+  }
+
   try {
     const chatCompletion = await openai.chat.completions.create({
       messages: [{ role: "user", content: content }],
@@ -34,7 +45,7 @@ export async function gpt4oResponse(content) {
   return chatGPTResponse(content, "gpt-4o");
 }
 
-// GPT-4 Turbo
+// GPT-4 Turbo Mini
 export async function gpt4oMiniResponse(content) {
   return chatGPTResponse(content, "gpt-4o-mini");
 }
