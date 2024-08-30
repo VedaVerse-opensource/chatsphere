@@ -46,7 +46,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
 
   return (
     <nav
-      className={`bg-background-light sticky top-0 dark:bg-background-dark ${
+      className={`bg-background-light fixed w-full top-0 dark:bg-background-dark ${
         isDarkMode ? "dark" : ""
       }`}
     >
