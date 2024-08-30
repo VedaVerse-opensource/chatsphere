@@ -1,7 +1,12 @@
 import OpenAI from "openai";
 
+let key;
+if (typeof window !== undefined) {
+  key = localStorage.getItem("openAiApiKey");
+}
+
 const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  apiKey: key,
   dangerouslyAllowBrowser: true,
 });
 

@@ -1,7 +1,12 @@
 import Groq from "groq-sdk";
 
+let key;
+if (typeof window !== undefined) {
+  key = localStorage.getItem("groqApiKey");
+}
+
 const groq = new Groq({
-  apiKey: localStorage.getItem("groqApiKey"),
+  apiKey: key,
   dangerouslyAllowBrowser: true,
 });
 
