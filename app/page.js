@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Prompt from "@/components/Prompt";
 import Cards from "@/components/Cards";
+import Navbar from "@/components/Navbar";
 
 const Home = () => {
   const [selectedModel, setSelectedModel] = useState("Groq - Llama 70b");
@@ -10,6 +11,7 @@ const Home = () => {
 
   return (
     <div className='flex-grow container mx-auto px-4 flex flex-col'>
+      <Navbar selectedModel={selectedModel} onModelChange={setSelectedModel} />
       {!isChatActive && (
         <>
           <div className='flex items-center justify-center mt-8'>

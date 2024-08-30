@@ -1,3 +1,4 @@
+// components/Navbar.js
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -14,11 +15,10 @@ import {
   IoPersonCircleOutline,
 } from "react-icons/io5";
 
-const Navbar = () => {
+const Navbar = ({ selectedModel, onModelChange }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
-  const [selectedModel, setSelectedModel] = useState("Groq - Llama 70b");
 
   const data = [
     { label: "Groq - Llama 70b", value: "groq" },
@@ -33,7 +33,7 @@ const Navbar = () => {
   ];
 
   const handleModelChange = value => {
-    setSelectedModel(value);
+    onModelChange(value);
   };
 
   const handleDialogClose = () => {

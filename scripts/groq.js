@@ -1,5 +1,4 @@
 import Groq from "groq-sdk";
-import { useEffect, useState } from "react";
 
 let groq;
 
