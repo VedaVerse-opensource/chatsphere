@@ -8,9 +8,11 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
 
   const handleSave = () => {
     // Save the keys to localStorage
-    localStorage.setItem("groqApiKey", groqKey);
-    localStorage.setItem("openAiApiKey", openAiKey);
-    localStorage.setItem("geminiApiKey", geminiKey);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("openAiApiKey", openAiKey);
+      localStorage.setItem("geminiApiKey", geminiKey);
+      localStorage.setItem("groqApiKey", groqKey);
+    }
     onClose();
   };
 
