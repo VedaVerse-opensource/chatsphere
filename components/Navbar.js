@@ -32,6 +32,13 @@ const Navbar = ({ selectedModel, onModelChange }) => {
     { label: "Gemini 1.0 Pro", value: "gemini-1.0-pro" },
   ];
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    const isDark = savedTheme === "dark";
+    setIsDarkMode(isDark);
+    document.documentElement.classList.toggle("dark", isDark);
+  }, []);
+
   const handleModelChange = value => {
     onModelChange(value);
   };
@@ -42,6 +49,13 @@ const Navbar = ({ selectedModel, onModelChange }) => {
 
   const handleAvatarClick = () => {
     setIsDialogOpen(true);
+  };
+
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    document.documentElement.classList.toggle("dark", newMode);
+    localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
   return (
