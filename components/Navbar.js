@@ -1,6 +1,6 @@
 // components/Navbar.js
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DropdownComponent from "./Dropdown";
@@ -18,6 +18,7 @@ import {
 const Navbar = ({ selectedModel, onModelChange }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [mounted, setMounted] = useState(false); 
   const router = useRouter();
 
   const data = [
@@ -33,6 +34,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
   ];
 
   useEffect(() => {
+    setMounted(true);
     const savedTheme = localStorage.getItem("theme") || "light";
     const isDark = savedTheme === "dark";
     setIsDarkMode(isDark);
@@ -57,6 +59,8 @@ const Navbar = ({ selectedModel, onModelChange }) => {
     document.documentElement.classList.toggle("dark", newMode);
     localStorage.setItem("theme", newMode ? "dark" : "light");
   };
+
+  if (!mounted) return null;
 
   return (
     <nav
@@ -99,7 +103,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
                   <IoMoonOutline size={20} />
                 )
               }
-              onClick={() => setIsDarkMode(!isDarkMode)}
+              onClick={toggleDarkMode}
             />
             <NavButton icon={<IoStarOutline size={20} />} />
             <button
