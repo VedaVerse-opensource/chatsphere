@@ -10,7 +10,7 @@ const Home = () => {
   const [isChatActive, setIsChatActive] = useState(false);
 
   return (
-    <div className='flex-grow container mx-auto px-4 flex flex-col'>
+    <div className='flex-grow container px-4 flex flex-col'>
       <Navbar selectedModel={selectedModel} onModelChange={setSelectedModel} />
       {!isChatActive && (
         <>
