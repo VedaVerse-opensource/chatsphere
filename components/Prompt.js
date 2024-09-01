@@ -11,6 +11,7 @@ import {
   gemini15FlashResponse,
   gemini10ProResponse,
 } from "../scripts/gemini";
+import { getClaudeResponse } from "@/scripts/claude";
 import ChatContainer from "./ChatContainer";
 import ChatInput from "./ChatInput";
 
@@ -29,7 +30,7 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
 
     setIsLoading(true);
     const newUserResponse = { type: "user", text: inputText };
-    setResponses((prev) => [...prev, newUserResponse]);
+    setResponses(prev => [...prev, newUserResponse]);
     setInputText("");
 
     const updatedContext = { ...context, [responses.length]: newUserResponse };
@@ -39,6 +40,9 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
       switch (selectedModel) {
         case "Groq - Llama 70b":
           content = await groqResponse(inputText, updatedContext);
+          break;
+        case "claude":
+          content = await getClaudeResponse(inputText);
           break;
         case "gpt-4o":
           content = await gpt4oResponse(inputText);
@@ -66,19 +70,22 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
       }
 
       const newAIResponse = { type: "ai", text: content };
-      setResponses((prev) => [...prev, newAIResponse]);
+      setResponses(prev => [...prev, newAIResponse]);
       setContext({ ...updatedContext, [responses.length + 1]: newAIResponse });
     } catch (error) {
       console.error("Error fetching response:", error);
-      const errorResponse = { type: "ai", text: "An error occurred while fetching the response. Please try again." };
-      setResponses((prev) => [...prev, errorResponse]);
+      const errorResponse = {
+        type: "ai",
+        text: "An error occurred while fetching the response. Please try again.",
+      };
+      setResponses(prev => [...prev, errorResponse]);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full max-w-3xl mx-auto my-12">
+    <div className='flex flex-col justify-center items-center w-full max-w-3xl mx-auto my-12'>
       <ChatContainer responses={responses} />
       <ChatInput
         inputText={inputText}

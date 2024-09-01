@@ -5,6 +5,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
   const [groqKey, setGroqKey] = useState("");
   const [openAiKey, setOpenAiKey] = useState("");
   const [geminiKey, setGeminiKey] = useState("");
+  const [claudeKey, setClaudeKey] = useState("");
 
   useEffect(() => {
     // Check if we're in a browser environment
@@ -12,10 +13,12 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       const storedGroqKey = localStorage.getItem("groqApiKey");
       const storedOpenAiKey = localStorage.getItem("openAiApiKey");
       const storedGeminiKey = localStorage.getItem("geminiApiKey");
+      const storedClaudeKey = localStorage.getItem("claudeApiKey");
 
       if (storedGroqKey) setGroqKey(storedGroqKey);
       if (storedOpenAiKey) setOpenAiKey(storedOpenAiKey);
       if (storedGeminiKey) setGeminiKey(storedGeminiKey);
+      if (storedClaudeKey) setClaudeKey(storedClaudeKey);
     }
   }, []);
 
@@ -24,6 +27,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       localStorage.setItem("openAiApiKey", openAiKey);
       localStorage.setItem("geminiApiKey", geminiKey);
       localStorage.setItem("groqApiKey", groqKey);
+      localStorage.setItem("claudeKey", claudeKey);
     }
     onClose();
   };
@@ -39,6 +43,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
           { label: "Groq API Key", value: groqKey, onChange: setGroqKey },
           { label: "OpenAI API Key", value: openAiKey, onChange: setOpenAiKey },
           { label: "Gemini API Key", value: geminiKey, onChange: setGeminiKey },
+          { label: "Claude API Key", value: claudeKey, onChange: setClaudeKey },
         ].map(({ label, value, onChange }) => (
           <div key={label} className='mb-4 flex items-center'>
             <label className='w-1/3 text-sm font-medium text-gray-700 dark:text-gray-200'>

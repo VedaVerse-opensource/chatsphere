@@ -22,6 +22,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
 
   const data = [
     { label: "Groq - Llama 70b", value: "groq" },
+    { label: "Claude 3.5 - Sonnet", value: "claude" },
     { label: "GPT-4o", value: "gpt-4o" },
     { label: "ChatGPT-4", value: "gpt-4" },
     { label: "GPT-4o mini", value: "gpt-4o-mini" },
