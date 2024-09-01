@@ -57,6 +57,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
             <button
               className='text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-2 rounded-full'
               onClick={() => router.push("/")}
+              title='Menu'
             >
               <IoMenu size={24} />
             </button>
@@ -66,6 +67,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
               width={24}
               height={24}
               className='text-secondary dark:text-quaternary'
+              title='New Chat'
             />
             <div className='hidden sm:block w-56 lg:w-64'>
               <DropdownComponent
@@ -76,8 +78,11 @@ const Navbar = ({ selectedModel, onModelChange }) => {
             </div>
           </div>
           <div className='flex items-center space-x-2 sm:space-x-4'>
-            <NavButton icon={<IoDocumentTextOutline size={20} />} />
-            <NavButton icon={<IoShareOutline size={20} />} />
+            <NavButton
+              icon={<IoDocumentTextOutline size={20} />}
+              title='Saved Prompts'
+            />
+            <NavButton icon={<IoShareOutline size={20} />} title='Share' />
             <NavButton
               icon={
                 isDarkMode ? (
@@ -87,11 +92,15 @@ const Navbar = ({ selectedModel, onModelChange }) => {
                 )
               }
               onClick={() => setIsDarkMode(!isDarkMode)}
+              title={
+                isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"
+              }
             />
-            <NavButton icon={<IoStarOutline size={20} />} />
+            <NavButton icon={<IoStarOutline size={20} />} title='Favorites' />
             <button
               className='text-primary hover:text-primary/80 transition-colors p-1 rounded-full'
               onClick={handleAvatarClick}
+              title='User Profile'
             >
               <IoPersonCircleOutline size={32} />
             </button>
@@ -104,10 +113,11 @@ const Navbar = ({ selectedModel, onModelChange }) => {
   );
 };
 
-const NavButton = ({ icon, onClick }) => (
+const NavButton = ({ icon, onClick, title }) => (
   <button
     className='text-secondary hover:text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-2 rounded-full'
     onClick={onClick}
+    title={title}
   >
     {icon}
   </button>
