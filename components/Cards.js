@@ -13,7 +13,7 @@ const Cards = () => {
       {cardsData.map((text, index) => (
         <div
           key={index}
-          className='bg-quaternary dark:bg-secondary rounded-2xl w-[90%] border border-red-200 p-6 hover:shadow-lg transition-shadow duration-300 text-center cursor-pointer'
+          className='bg-quaternary dark:bg-secondary rounded-2xl w-[90%] border border-red-200 p-6 hover:shadow-lg transition-shadow duration-300 text-center cursor-pointer flex justify-center items-center'
         >
           <p className='text-secondary text-sm dark:text-quaternary'>{text}</p>
         </div>
