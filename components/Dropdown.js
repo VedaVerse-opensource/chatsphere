@@ -19,7 +19,7 @@ const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
   const handleChange = selectedOption => {
     setSelectedOption(selectedOption);
     if (onSelect) {
-      onSelect(selectedOption ? selectedOption.value : null);
+      onSelect(selectedOption ? selectedOption.name : null);
     }
   };
 
