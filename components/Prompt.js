@@ -38,10 +38,10 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
     let content;
     try {
       switch (selectedModel) {
-        case "Groq - Llama 70b":
+        case "llama70b":
           content = await groqResponse(inputText, updatedContext);
           break;
-        case "claude":
+        case "3.5sonnet":
           content = await getClaudeResponse(inputText);
           break;
         case "gpt-4o":

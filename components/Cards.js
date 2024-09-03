@@ -3,7 +3,7 @@ import React from "react";
 const cardsData = [
   "ChatSphere is an open source project built by the students of VedaVerse",
   "Chats are stored right in your browser, providing complete privacy",
-  "Save money by using a single subscription for many AI Models with ChatSphere",
+  "Save money by using your own api keys and you dont need to have any subscription",
   "Visit GitHub and start Contributing!",
 ];
 
