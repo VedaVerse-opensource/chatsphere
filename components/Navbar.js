@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DropdownComponent from "./Dropdown";
@@ -18,6 +18,24 @@ const Navbar = ({ selectedModel, onModelChange }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const groqKeyStored = localStorage.getItem("groqApiKey");
+      const openAiKeyStored = localStorage.getItem("openAiApiKey");
+      const geminiKeyStored = localStorage.getItem("geminiApiKey");
+      const claudeKeyStored = localStorage.getItem("claudeApiKey");
+
+      if (
+        groqKeyStored === null &&
+        openAiKeyStored === null &&
+        geminiKeyStored === null &&
+        claudeKeyStored === null
+      ) {
+        setIsDialogOpen(true);
+      }
+    }
+  }, []);
 
   const data = [
     {
