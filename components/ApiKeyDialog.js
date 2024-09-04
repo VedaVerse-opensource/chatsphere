@@ -86,12 +86,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
             Usage Instructions
           </h2>
           <p className='text-md text-gray-700 dark:text-gray-300'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt quasi
-            voluptate dolorum maxime eligendi. Hic libero blanditiis aut culpa
-            tempora non voluptate repellat illum voluptates explicabo eum
-            consequuntur, debitis itaque, repellendus, nulla eveniet
-            reprehenderit eaque? Suscipit architecto nam, dolor odio eaque magni
-            odit dolore maxime, quas aperiam commodi, alias laborum?
+            Updating soon!!
           </p>
         </div>
       );
