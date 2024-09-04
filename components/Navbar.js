@@ -12,6 +12,7 @@ import {
   IoMoonOutline,
   IoStarOutline,
   IoPersonCircleOutline,
+  IoLogoGithub,
 } from "react-icons/io5";
 
 const Navbar = ({ selectedModel, onModelChange }) => {
@@ -126,6 +127,15 @@ const Navbar = ({ selectedModel, onModelChange }) => {
             </div>
           </div>
           <div className='flex items-center space-x-2 sm:space-x-4'>
+            <a
+              href='https://github.com/VedaVerse-opensource/chatsphere'
+              target='_blank'
+            >
+              <NavButton
+                icon={<IoLogoGithub size={20} />}
+                title='View ChatSphere on GitHub'
+              />
+            </a>
             <NavButton
               icon={<IoDocumentTextOutline size={20} />}
               title='Saved Prompts'

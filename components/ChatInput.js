@@ -13,7 +13,7 @@ const ChatInput = ({ inputText, setInputText, handleSend }) => {
 
   const handleKeyDown = e => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // Prevents default behavior (new line)
+      e.preventDefault();
       handleSend();
     }
   };
@@ -22,6 +22,9 @@ const ChatInput = ({ inputText, setInputText, handleSend }) => {
     <div className='py-4 px-2 w-[60%] fixed bottom-0 flex items-center'>
       <div className='flex-grow bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-full'>
         <div className='flex items-center px-4 py-2'>
+          <button className='ml-2'>
+            <Image src='/icons/attach.svg' alt='Mic' width={24} height={24} />
+          </button>
           <textarea
             ref={textareaRef}
             className='flex-grow bg-transparent focus:outline-none rounded-full pl-5 text-gray-800 dark:text-gray-200 text-sm placeholder-gray-400 resize-none overflow-hidden py-2'
@@ -35,9 +38,6 @@ const ChatInput = ({ inputText, setInputText, handleSend }) => {
               maxHeight: "8rem",
             }}
           />
-          <button className='ml-2'>
-            <Image src='/icons/attach.svg' alt='Mic' width={24} height={24} />
-          </button>
         </div>
       </div>
       <button
