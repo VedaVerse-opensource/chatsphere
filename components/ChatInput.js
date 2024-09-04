@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
 
-const ChatInput = ({ inputText, setInputText, handleSend }) => {
+const ChatInput = ({ inputText, setInputText, handleSend, isLoading }) => {
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -41,10 +41,17 @@ const ChatInput = ({ inputText, setInputText, handleSend }) => {
         </div>
       </div>
       <button
-        className='bg-primary hover:bg-primary/80 text-white rounded-full p-3 transition-colors ml-2'
+        className={`bg-primary hover:bg-primary/80 text-white rounded-full p-3 transition-colors ml-2 ${
+          isLoading ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
         onClick={handleSend}
+        disabled={isLoading}
       >
-        <Image src='/icons/send.svg' alt='Mic' width={24} height={24} />
+        {isLoading ? (
+          <div className="w-6 h-6 border-t-2 border-white rounded-full animate-spin"></div>
+        ) : (
+          <Image src='/icons/send.svg' alt='Send' width={24} height={24} />
+        )}
       </button>
     </div>
   );
