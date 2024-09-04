@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
 const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(() => {
+    const storedModel = localStorage.getItem("selectedModel");
+    if (storedModel) {
+      const option = data
+        .flatMap(group => group.options)
+        .find(opt => opt.name === storedModel);
+      return option || null;
+    }
+    return null;
+  });
   const [optionsWithState, setOptionsWithState] = useState([]);
 
   useEffect(() => {
@@ -19,7 +28,7 @@ const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
   const handleChange = selectedOption => {
     setSelectedOption(selectedOption);
     if (onSelect) {
-      onSelect(selectedOption ? selectedOption.name : null);
+      onSelect(selectedOption ? selectedOption.name : "Select Model");
     }
   };
 
@@ -28,9 +37,9 @@ const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
       ...base,
       backgroundColor: isDarkMode ? "#444444" : "#efefef",
       borderColor: state.isFocused ? "#e73529" : "transparent",
-      borderRadius: "10px",
-      padding: "5px 10px",
-      minHeight: "50px",
+      borderRadius: "8px",
+      padding: "2px 4px",
+      minHeight: "32px",
       boxShadow: state.isFocused ? "0 0 0 3px rgba(231, 53, 41, 0.3)" : "none",
       transition: "all 0.3s ease",
       "&:hover": {
@@ -91,14 +100,14 @@ const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
       // backgroundColor: isDarkMode ? "#444444" : "#efefef",
       color: isDarkMode ? "#ffffff" : "#e73529",
       padding: "8px 15px",
-      fontWeight: "bold",
+      // fontWeight: "bold",
       fontSize: "14px",
       marginBottom: "5px",
     }),
   };
 
   return (
-    <div className='min-w-[200px]'>
+    <div className='min-w-[120px] sm:min-w-[160px] md:min-w-[200px]'>
       <Select
         styles={customStyles}
         options={optionsWithState}

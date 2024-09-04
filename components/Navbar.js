@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DropdownComponent from "./Dropdown";
@@ -13,12 +13,15 @@ import {
   IoStarOutline,
   IoPersonCircleOutline,
   IoLogoGithub,
+  IoClose,
 } from "react-icons/io5";
 
 const Navbar = ({ selectedModel, onModelChange }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
+  const menuRef = useRef(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -84,15 +87,29 @@ const Navbar = ({ selectedModel, onModelChange }) => {
 
   const handleModelChange = name => {
     onModelChange(name);
+    setIsMenuOpen(false);
   };
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
   };
 
-  const handleAvatarClick = () => {
-    setIsDialogOpen(true);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav
@@ -100,22 +117,24 @@ const Navbar = ({ selectedModel, onModelChange }) => {
         isDarkMode ? "dark" : ""
       }`}
     >
-      <div className='max-w-7xl mx-auto px-2'>
-        <div className='flex items-center justify-between h-16'>
-          <div className='flex items-center space-x-4'>
+      <div className='max-w-7xl mx-auto px-2 sm:px-4 md:px-6'>
+        <div className='flex items-center justify-between h-14 sm:h-16 md:h-20'>
+          <div className='flex items-center space-x-2 sm:space-x-3 md:space-x-4'>
             <button
-              className='text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-2 rounded-full'
-              onClick={() => router.push("/")}
+              className='text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-1 sm:p-2 rounded-full'
+              onClick={() => {
+                /* Handle hamburger menu click */
+              }}
               title='Menu'
             >
-              <IoMenu size={24} />
+              <IoMenu size={24} className='sm:w-6 sm:h-6 md:w-7 md:h-7' />
             </button>
             <Image
               src='/icons/file.svg'
               alt='New Chat'
-              width={24}
-              height={24}
-              className='text-secondary dark:text-quaternary'
+              width={20}
+              height={20}
+              className='text-secondary dark:text-quaternary sm:w-5 sm:h-5 md:w-6 md:h-6'
               title='New Chat'
             />
             <div className='hidden sm:block w-56 lg:w-64'>
@@ -123,45 +142,51 @@ const Navbar = ({ selectedModel, onModelChange }) => {
                 data={data}
                 placeholder={selectedModel}
                 onSelect={handleModelChange}
+                isDarkMode={isDarkMode}
               />
             </div>
           </div>
-          <div className='flex items-center space-x-2 sm:space-x-4'>
-            <a
-              href='https://github.com/VedaVerse-opensource/chatsphere'
-              target='_blank'
-            >
-              <NavButton
-                icon={<IoLogoGithub size={20} />}
-                title='View ChatSphere on GitHub'
+          <div className='flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
+            <div className='hidden sm:flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
+              <NavButtons
+                isDarkMode={isDarkMode}
+                setIsDarkMode={setIsDarkMode}
               />
-            </a>
-            <NavButton
-              icon={<IoDocumentTextOutline size={20} />}
-              title='Saved Prompts'
-            />
-            <NavButton icon={<IoShareOutline size={20} />} title='Share' />
-            <NavButton
-              icon={
-                isDarkMode ? (
-                  <IoSunnyOutline size={20} />
-                ) : (
-                  <IoMoonOutline size={20} />
-                )
-              }
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              title={
-                isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"
-              }
-            />
-            <NavButton icon={<IoStarOutline size={20} />} title='Favorites' />
-            <button
-              className='text-primary hover:text-primary/80 transition-colors p-1 rounded-full'
-              onClick={handleAvatarClick}
-              title='User Profile'
-            >
-              <IoPersonCircleOutline size={32} />
-            </button>
+            </div>
+            <div className='relative' ref={menuRef}>
+              <button
+                className='text-primary hover:text-primary/80 transition-colors p-1 rounded-full'
+                onClick={toggleMenu}
+                title='User Profile'
+              >
+                <IoPersonCircleOutline size={32} />
+              </button>
+              {isMenuOpen && (
+                <div className='absolute right-0 mt-2 w-64 sm:w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10'>
+                  <div className='sm:hidden flex justify-center py-2'>
+                    <NavButtons
+                      isDarkMode={isDarkMode}
+                      setIsDarkMode={setIsDarkMode}
+                    />
+                  </div>
+                  <div className='sm:hidden px-4 py-2'>
+                    <DropdownComponent
+                      data={data}
+                      placeholder={selectedModel}
+                      onSelect={handleModelChange}
+                      isDarkMode={isDarkMode}
+                    />
+                  </div>
+                  <button
+                    className='block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    onClick={() => setIsDialogOpen(true)}
+                  >
+                    API Keys
+                  </button>
+                  {/* Add more menu items as needed */}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -171,13 +196,44 @@ const Navbar = ({ selectedModel, onModelChange }) => {
   );
 };
 
+const NavButtons = ({ isDarkMode, setIsDarkMode }) => (
+  <>
+    <a
+      href='https://github.com/VedaVerse-opensource/chatsphere'
+      target='_blank'
+      rel='noopener noreferrer'
+    >
+      <NavButton
+        icon={<IoLogoGithub size={20} />}
+        title='View ChatSphere on GitHub'
+      />
+    </a>
+    <NavButton
+      icon={<IoDocumentTextOutline size={20} />}
+      title='Saved Prompts'
+    />
+    <NavButton icon={<IoShareOutline size={20} />} title='Share' />
+    <NavButton
+      icon={
+        isDarkMode ? <IoSunnyOutline size={20} /> : <IoMoonOutline size={20} />
+      }
+      onClick={() => setIsDarkMode(!isDarkMode)}
+      title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+    />
+    <NavButton icon={<IoStarOutline size={20} />} title='Favorites' />
+  </>
+);
+
 const NavButton = ({ icon, onClick, title }) => (
   <button
-    className='text-secondary hover:text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-2 rounded-full'
+    className='text-secondary hover:text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-1 sm:p-1.5 md:p-2 rounded-full'
     onClick={onClick}
     title={title}
   >
-    {icon}
+    {React.cloneElement(icon, {
+      size: 20,
+      className: "sm:w-5 sm:h-5 md:w-6 md:h-6",
+    })}
   </button>
 );
 

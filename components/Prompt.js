@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import groqResponse from "../scripts/groq";
 import {
   gpt4Response,
@@ -21,7 +21,7 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
   const [context, setContext] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = async () => {
+  const handleSend = useCallback(async () => {
     if (inputText.trim() === "") return;
 
     if (!chatActive) {
@@ -35,43 +35,57 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
 
     const updatedContext = { ...context, [responses.length]: newUserResponse };
     console.log(selectedModel);
-    let content;
+
+    let responseGenerator;
     try {
       switch (selectedModel) {
         case "llama70b":
-          content = await groqResponse(inputText, updatedContext);
+          responseGenerator = groqResponse(inputText, updatedContext);
           break;
         case "3.5sonnet":
-          content = await getClaudeResponse(inputText);
+          responseGenerator = getClaudeResponse(inputText);
           break;
         case "gpt-4o":
-          content = await gpt4oResponse(inputText);
+          responseGenerator = gpt4oResponse(inputText);
           break;
         case "gpt-4":
-          content = await gpt4Response(inputText);
+          responseGenerator = gpt4Response(inputText);
           break;
         case "gpt-4o-mini":
-          content = await gpt4oMiniResponse(inputText);
+          responseGenerator = gpt4oMiniResponse(inputText);
           break;
         case "gpt-3.5-turbo":
-          content = await gpt35TurboResponse(inputText);
+          responseGenerator = gpt35TurboResponse(inputText);
           break;
         case "gemini-1.5-pro":
-          content = await gemini15ProResponse(inputText);
+          responseGenerator = gemini15ProResponse(inputText);
           break;
         case "gemini-1.5-flash":
-          content = await gemini15FlashResponse(inputText);
+          responseGenerator = gemini15FlashResponse(inputText);
           break;
         case "gemini-1.0-pro":
-          content = await gemini10ProResponse(inputText);
+          responseGenerator = gemini10ProResponse(inputText);
           break;
         default:
-          content = "Unsupported model selected";
+          throw new Error("Unsupported model selected");
       }
 
-      const newAIResponse = { type: "ai", text: content };
+      let fullContent = "";
+      const newAIResponse = { type: "ai", text: "" };
       setResponses(prev => [...prev, newAIResponse]);
-      setContext({ ...updatedContext, [responses.length + 1]: newAIResponse });
+
+      for await (const chunk of responseGenerator) {
+        fullContent += chunk;
+        setResponses(prev => [
+          ...prev.slice(0, -1),
+          { ...newAIResponse, text: fullContent },
+        ]);
+      }
+
+      setContext({
+        ...updatedContext,
+        [responses.length + 1]: { ...newAIResponse, text: fullContent },
+      });
     } catch (error) {
       console.error("Error fetching response:", error);
       const errorResponse = {
@@ -82,10 +96,10 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [inputText, selectedModel, chatActive, onChatStart, context, responses]);
 
   return (
-    <div className='flex flex-col justify-center items-center w-full max-w-3xl mx-auto my-12'>
+    <div className='flex flex-col justify-center items-center w-full max-w-3xl mx-auto my-6 sm:my-8 md:my-12'>
       <ChatContainer responses={responses} />
       <ChatInput
         inputText={inputText}

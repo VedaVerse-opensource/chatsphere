@@ -14,13 +14,14 @@ const ChatContainer = ({ responses }) => {
   return (
     <div
       ref={chatContainerRef}
-      className="overflow-y-auto space-y-4 w-[80%] px-2 mb-[4.5rem]">
+      className='overflow-y-auto space-y-4 w-full sm:w-[90%] md:w-[80%] px-2 mb-20 sm:mb-24'
+    >
       {responses.map((response, index) =>
         response.type === "user" ? (
           <UserBubble key={index} text={response.text} />
         ) : (
           <AIBubble key={index} text={response.text} />
-        )
+        ),
       )}
     </div>
   );
