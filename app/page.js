@@ -1,18 +1,22 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Prompt from "@/components/Prompt";
 import Cards from "@/components/Cards";
 import Navbar from "@/components/Navbar";
 
 const Home = () => {
-  const [selectedModel, setSelectedModel] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("selectedModel") || "Select Model";
-    }
-    return "Select Model";
-  });
+  const [selectedModel, setSelectedModel] = useState("Select Model");
   const [isChatActive, setIsChatActive] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const storedModel = localStorage.getItem("selectedModel");
+      if (storedModel) {
+        setSelectedModel(storedModel);
+      }
+    }
+  }, []);
 
   const handleModelChange = model => {
     setSelectedModel(model);
@@ -22,34 +26,33 @@ const Home = () => {
   };
 
   return (
-    <div className='flex-grow container px-2 sm:px-4 md:px-6 lg:px-8 flex flex-col'>
+    <div className='flex flex-col min-h-screen bg-white dark:bg-gray-800'>
       <Navbar selectedModel={selectedModel} onModelChange={handleModelChange} />
-      {!isChatActive && (
-        <>
-          <div className='flex items-center justify-center mt-4 sm:mt-8 md:mt-12'>
-            <Image
-              src='/icons/logo.svg'
-              alt='ChatSphere logo'
-              width='60'
-              height='60'
-              className='mr-2 sm:mr-4 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16'
-            />
-            <h1 className='text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-primary'>
-              ChatSphere
-            </h1>
-          </div>
-          <div className='flex-grow flex flex-col justify-center items-center mt-4 sm:mt-6 md:mt-8'>
+      <main className='flex-grow flex flex-col'>
+        {!isChatActive ? (
+          <div className='flex-grow flex flex-col items-center justify-center px-4'>
+            <div className='flex items-center justify-center mb-8'>
+              <Image
+                src='/icons/logo.svg'
+                alt='ChatSphere logo'
+                width='60'
+                height='60'
+                className='mr-4 w-12 h-12 md:w-16 md:h-16'
+              />
+              <h1 className='text-3xl md:text-5xl lg:text-6xl font-bold text-primary'>
+                ChatSphere
+              </h1>
+            </div>
             <Cards />
           </div>
-        </>
-      )}
-      <div className='w-full h-full px-2 sm:px-4 md:px-6 lg:px-8'>
-        <Prompt
-          selectedModel={selectedModel}
-          chatActive={isChatActive}
-          onChatStart={() => setIsChatActive(true)}
-        />
-      </div>
+        ) : (
+          <Prompt
+            selectedModel={selectedModel}
+            chatActive={isChatActive}
+            onChatStart={() => setIsChatActive(true)}
+          />
+        )}
+      </main>
     </div>
   );
 };

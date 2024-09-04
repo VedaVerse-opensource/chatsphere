@@ -3,14 +3,16 @@ import Select from "react-select";
 
 const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
   const [selectedOption, setSelectedOption] = useState(() => {
-    const storedModel = localStorage.getItem("selectedModel");
-    if (storedModel) {
-      const option = data
-        .flatMap(group => group.options)
-        .find(opt => opt.name === storedModel);
-      return option || null;
+    if (typeof window !== "undefined") {
+      const storedModel = localStorage.getItem("selectedModel");
+      if (storedModel) {
+        const option = data
+          .flatMap(group => group.options)
+          .find(opt => opt.name === storedModel);
+        return option || null;
+      }
+      return null;
     }
-    return null;
   });
   const [optionsWithState, setOptionsWithState] = useState([]);
 
