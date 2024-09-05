@@ -150,10 +150,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
           </div>
           <div className='flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
             <div className='hidden sm:flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
-              <NavButtons
-                isDarkMode={isDarkMode}
-                setIsDarkMode={setIsDarkMode}
-              />
+              <NavButtons />
             </div>
             <div className='relative' ref={menuRef}>
               <button
@@ -166,10 +163,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
               {isMenuOpen && (
                 <div className='absolute right-0 mt-2 w-64 sm:w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10'>
                   <div className='sm:hidden flex justify-center py-2'>
-                    <NavButtons
-                      isDarkMode={isDarkMode}
-                      setIsDarkMode={setIsDarkMode}
-                    />
+                    <NavButtons />
                   </div>
                   <div className='sm:hidden px-4 py-2'>
                     <DropdownComponent
@@ -198,7 +192,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
   );
 };
 
-const NavButtons = ({ isDarkMode, setIsDarkMode }) => (
+const NavButtons = () => (
   <>
     <a
       href='https://github.com/VedaVerse-opensource/chatsphere'
@@ -210,19 +204,7 @@ const NavButtons = ({ isDarkMode, setIsDarkMode }) => (
         title='View ChatSphere on GitHub'
       />
     </a>
-    <NavButton
-      icon={<IoDocumentTextOutline size={20} />}
-      title='Saved Prompts'
-    />
     <NavButton icon={<IoShareOutline size={20} />} title='Share' />
-    <NavButton
-      icon={
-        isDarkMode ? <IoSunnyOutline size={20} /> : <IoMoonOutline size={20} />
-      }
-      onClick={() => setIsDarkMode(!isDarkMode)}
-      title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-    />
-    <NavButton icon={<IoStarOutline size={20} />} title='Favorites' />
   </>
 );
 

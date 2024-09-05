@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Dialog from "./Dialog";
+import {
+  IoDocumentTextOutline,
+  IoSunnyOutline,
+  IoMoonOutline,
+  IoStarOutline,
+} from "react-icons/io5";
 
 const ApiKeyDialog = ({ isOpen, onClose }) => {
   const [groqKey, setGroqKey] = useState("");
@@ -7,6 +13,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
   const [geminiKey, setGeminiKey] = useState("");
   const [claudeKey, setClaudeKey] = useState("");
   const [activeSection, setActiveSection] = useState("setApiKeys");
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -19,6 +26,8 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       if (storedOpenAiKey) setOpenAiKey(storedOpenAiKey);
       if (storedGeminiKey) setGeminiKey(storedGeminiKey);
       if (storedClaudeKey) setClaudeKey(storedClaudeKey);
+
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
     }
   }, []);
 
@@ -30,6 +39,13 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       localStorage.setItem("claudeKey", claudeKey);
     }
     onClose();
+  };
+
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    document.documentElement.classList.toggle("dark", newMode);
+    localStorage.setItem("darkMode", newMode);
   };
 
   const renderSectionContent = () => {
@@ -79,6 +95,36 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
         </div>
       );
     }
+    if (activeSection === "settings") {
+      return (
+        <div className='p-4 sm:p-6 md:p-8 h-full overflow-y-auto'>
+          <h2 className='text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 whitespace-nowrap text-primary'>
+            Settings
+          </h2>
+          <div className='space-y-4'>
+            <button
+              className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'
+              onClick={toggleDarkMode}
+            >
+              {isDarkMode ? (
+                <IoSunnyOutline size={20} />
+              ) : (
+                <IoMoonOutline size={20} />
+              )}
+              <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
+            </button>
+            <button className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'>
+              <IoDocumentTextOutline size={20} />
+              <span>Saved Prompts</span>
+            </button>
+            <button className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'>
+              <IoStarOutline size={20} />
+              <span>Favorites</span>
+            </button>
+          </div>
+        </div>
+      );
+    }
     if (activeSection === "howToUse") {
       return (
         <div className='p-4 sm:p-6 md:p-8 h-full overflow-y-auto'>
@@ -103,6 +149,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
           <div className='flex flex-row sm:flex-col space-x-2 sm:space-x-0 sm:space-y-2'>
             {[
               { id: "setApiKeys", label: "Set API Keys" },
+              { id: "settings", label: "Settings" },
               { id: "howToUse", label: "How to Use?" },
             ].map(({ id, label }) => (
               <button
