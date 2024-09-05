@@ -113,7 +113,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
 
   return (
     <nav
-      className={`bg-background-light fixed w-full top-0 dark:bg-background-dark ${
+      className={`bg-background-light fixed w-full top-0 dark:bg-background-dark z-50 ${
         isDarkMode ? "dark" : ""
       }`}
     >
@@ -181,7 +181,7 @@ const Navbar = ({ selectedModel, onModelChange }) => {
                     className='block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
                     onClick={() => setIsDialogOpen(true)}
                   >
-                    API Keys
+                    Settings
                   </button>
                   {/* Add more menu items as needed */}
                 </div>

@@ -14,7 +14,7 @@ const ChatContainer = ({ responses }) => {
   return (
     <div
       ref={chatContainerRef}
-      className='overflow-y-auto space-y-4 w-full sm:w-[90%] md:w-[80%] px-2 mb-20 sm:mb-24'
+      className='overflow-y-auto space-y-4 w-full px-2 mb-20 sm:mb-24'
     >
       {responses.map((response, index) =>
         response.type === "user" ? (
