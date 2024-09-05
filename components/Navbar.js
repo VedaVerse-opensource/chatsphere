@@ -44,7 +44,9 @@ const Navbar = ({ selectedModel, onModelChange }) => {
   const data = [
     {
       label: "Groq",
-      options: [{ label: "Llama 70b", value: "groqApiKey", name: "llama70b" }],
+      options: [
+        { label: "Llama 70b Versatile", value: "groqApiKey", name: "llama70b" },
+      ],
     },
     {
       label: "Claude",
