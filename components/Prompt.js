@@ -20,9 +20,15 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
   const [responses, setResponses] = useState([]);
   const [context, setContext] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState(null);
+
+  const handleFileSelect = file => {
+    setUploadedFile(file);
+    setInputText(`Analyzing file: ${file.name}`);
+  };
 
   const handleSend = useCallback(async () => {
-    if (inputText.trim() === "") return;
+    if (inputText.trim() === "" && !uploadedFile) return;
 
     if (!chatActive) {
       onChatStart();
@@ -34,40 +40,16 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
     setInputText("");
 
     const updatedContext = { ...context, [responses.length]: newUserResponse };
-    console.log(selectedModel);
 
     let responseGenerator;
     try {
-      switch (selectedModel) {
-        case "llama70b":
-          responseGenerator = groqResponse(inputText, updatedContext);
-          break;
-        case "3.5sonnet":
-          responseGenerator = getClaudeResponse(inputText);
-          break;
-        case "gpt-4o":
-          responseGenerator = gpt4oResponse(inputText);
-          break;
-        case "gpt-4":
-          responseGenerator = gpt4Response(inputText);
-          break;
-        case "gpt-4o-mini":
-          responseGenerator = gpt4oMiniResponse(inputText);
-          break;
-        case "gpt-3.5-turbo":
-          responseGenerator = gpt35TurboResponse(inputText);
-          break;
-        case "gemini-1.5-pro":
-          responseGenerator = gemini15ProResponse(inputText);
-          break;
-        case "gemini-1.5-flash":
-          responseGenerator = gemini15FlashResponse(inputText);
-          break;
-        case "gemini-1.0-pro":
-          responseGenerator = gemini10ProResponse(inputText);
-          break;
-        default:
-          throw new Error("Unsupported model selected");
+      if (uploadedFile) {
+        // Process the uploaded file
+        const fileContent = await readFileContent(uploadedFile);
+        responseGenerator = processFileContent(fileContent, selectedModel);
+      } else {
+        // Use the existing chat models
+        responseGenerator = getChatResponse(inputText, selectedModel);
       }
 
       let fullContent = "";
@@ -95,8 +77,57 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
       setResponses(prev => [...prev, errorResponse]);
     } finally {
       setIsLoading(false);
+      setUploadedFile(null);
     }
-  }, [inputText, selectedModel, chatActive, onChatStart, context, responses]);
+  }, [
+    inputText,
+    selectedModel,
+    chatActive,
+    onChatStart,
+    context,
+    responses,
+    uploadedFile,
+  ]);
+
+  const readFileContent = file => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = event => resolve(event.target.result);
+      reader.onerror = error => reject(error);
+      reader.readAsText(file);
+    });
+  };
+
+  const processFileContent = (content, model) => {
+    // Implement file processing logic here
+    // For now, we'll just use the existing chat models
+    return getChatResponse(`Analyze the following content: ${content}`, model);
+  };
+
+  const getChatResponse = (content, model) => {
+    switch (model) {
+      case "llama70b":
+        return groqResponse(content, context);
+      case "3.5sonnet":
+        return getClaudeResponse(content);
+      case "gpt-4o":
+        return gpt4oResponse(content);
+      case "gpt-4":
+        return gpt4Response(content);
+      case "gpt-4o-mini":
+        return gpt4oMiniResponse(content);
+      case "gpt-3.5-turbo":
+        return gpt35TurboResponse(content);
+      case "gemini-1.5-pro":
+        return gemini15ProResponse(content);
+      case "gemini-1.5-flash":
+        return gemini15FlashResponse(content);
+      case "gemini-1.0-pro":
+        return gemini10ProResponse(content);
+      default:
+        throw new Error("Unsupported model selected");
+    }
+  };
 
   return (
     <div className='flex flex-col justify-center items-center w-full max-w-3xl mx-auto my-6 sm:my-8 md:my-12'>
@@ -106,6 +137,7 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
         setInputText={setInputText}
         handleSend={handleSend}
         isLoading={isLoading}
+        onFileSelect={handleFileSelect}
       />
     </div>
   );

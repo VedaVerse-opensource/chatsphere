@@ -1,7 +1,14 @@
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
+import FileUpload from "./FileUpload";
 
-const ChatInput = ({ inputText, setInputText, handleSend, isLoading }) => {
+const ChatInput = ({
+  inputText,
+  setInputText,
+  handleSend,
+  isLoading,
+  onFileSelect,
+}) => {
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -22,15 +29,7 @@ const ChatInput = ({ inputText, setInputText, handleSend, isLoading }) => {
     <div className='py-2 sm:py-4 px-2 sm:px-4 w-full sm:w-[80%] md:w-[70%] lg:w-[60%] fixed bottom-0 flex items-center'>
       <div className='flex-grow bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-full'>
         <div className='flex items-center px-2 sm:px-4 py-1 sm:py-2'>
-          <button className='ml-1 sm:ml-2'>
-            <Image
-              src='/icons/attach.svg'
-              alt='Attach'
-              width={20}
-              height={20}
-              className='w-5 h-5 sm:w-6 sm:h-6'
-            />
-          </button>
+          <FileUpload onFileSelect={onFileSelect} />
           <textarea
             ref={textareaRef}
             className='flex-grow bg-transparent focus:outline-none rounded-full pl-2 sm:pl-4 text-gray-800 dark:text-gray-200 text-xs sm:text-sm placeholder-gray-400 resize-none overflow-hidden py-1 sm:py-2'
