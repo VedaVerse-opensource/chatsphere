@@ -105,25 +105,30 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
   };
 
   const getChatResponse = (content, model) => {
+    const contextMessages = Object.values(context).map(response => ({
+      role: response.type === "user" ? "user" : "assistant",
+      content: response.text,
+    }));
+
     switch (model) {
       case "llama70b":
-        return groqResponse(content, context);
+        return groqResponse(content, contextMessages);
       case "3.5sonnet":
-        return getClaudeResponse(content);
+        return getClaudeResponse(content, contextMessages);
       case "gpt-4o":
-        return gpt4oResponse(content);
+        return gpt4oResponse(content, contextMessages);
       case "gpt-4":
-        return gpt4Response(content);
+        return gpt4Response(content, contextMessages);
       case "gpt-4o-mini":
-        return gpt4oMiniResponse(content);
+        return gpt4oMiniResponse(content, contextMessages);
       case "gpt-3.5-turbo":
-        return gpt35TurboResponse(content);
+        return gpt35TurboResponse(content, contextMessages);
       case "gemini-1.5-pro":
-        return gemini15ProResponse(content);
+        return gemini15ProResponse(content, contextMessages);
       case "gemini-1.5-flash":
-        return gemini15FlashResponse(content);
+        return gemini15FlashResponse(content, contextMessages);
       case "gemini-1.0-pro":
-        return gemini10ProResponse(content);
+        return gemini10ProResponse(content, contextMessages);
       default:
         throw new Error("Unsupported model selected");
     }

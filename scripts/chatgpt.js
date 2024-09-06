@@ -29,7 +29,7 @@ if (typeof window !== "undefined") {
   });
 }
 
-async function* chatGPTResponse(content, model) {
+async function* chatGPTResponse(content, model, contextMessages) {
   if (!openai) {
     console.error("OpenAI SDK is not initialized. Please check your API key.");
     yield "OpenAI SDK not initialized. Please check your API key and reload the page.";
@@ -37,8 +37,9 @@ async function* chatGPTResponse(content, model) {
   }
 
   try {
+    const messages = [...contextMessages, { role: "user", content: content }];
     const stream = await openai.chat.completions.create({
-      messages: [{ role: "user", content: content }],
+      messages: messages,
       model: model,
       stream: true,
     });
@@ -52,18 +53,18 @@ async function* chatGPTResponse(content, model) {
   }
 }
 
-export async function* gpt4Response(content) {
-  yield* chatGPTResponse(content, "gpt-4");
+export async function* gpt4Response(content, contextMessages) {
+  yield* chatGPTResponse(content, "gpt-4", contextMessages);
 }
 
-export async function* gpt4oResponse(content) {
-  yield* chatGPTResponse(content, "gpt-4-0613");
+export async function* gpt4oResponse(content, contextMessages) {
+  yield* chatGPTResponse(content, "gpt-4-0613", contextMessages);
 }
 
-export async function* gpt4oMiniResponse(content) {
-  yield* chatGPTResponse(content, "gpt-4-0613");
+export async function* gpt4oMiniResponse(content, contextMessages) {
+  yield* chatGPTResponse(content, "gpt-4-0613", contextMessages);
 }
 
-export async function* gpt35TurboResponse(content) {
-  yield* chatGPTResponse(content, "gpt-3.5-turbo");
+export async function* gpt35TurboResponse(content, contextMessages) {
+  yield* chatGPTResponse(content, "gpt-3.5-turbo", contextMessages);
 }

@@ -10,15 +10,10 @@ if (typeof window !== "undefined") {
   });
 }
 
-async function* groqResponse(content, context) {
+async function* groqResponse(content, contextMessages) {
   if (!groq) yield "Groq SDK not initialized";
 
   try {
-    const contextMessages = Object.values(context).map(response => ({
-      role: response.type === "user" ? "user" : "assistant",
-      content: response.text,
-    }));
-
     const messages = [...contextMessages, { role: "user", content: content }];
 
     const stream = await groq.chat.completions.create({

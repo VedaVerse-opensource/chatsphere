@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-export async function* getClaudeResponse(prompt) {
+export async function* getClaudeResponse(prompt, contextMessages) {
   try {
     let apiKey = "";
     if (typeof window !== "undefined") {
@@ -19,7 +19,7 @@ export async function* getClaudeResponse(prompt) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt, apiKey }),
+      body: JSON.stringify({ prompt, apiKey, contextMessages }),
     });
 
     if (!response.ok) {

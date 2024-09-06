@@ -1,13 +1,18 @@
-import { NextResponse } from "next/server";
 import axios from "axios";
 
 export async function POST(request) {
-  const { prompt, apiKey } = await request.json();
+  const { prompt, apiKey, contextMessages } = await request.json();
 
   console.log("Received request with prompt:", prompt);
   console.log("API Key present:", !!apiKey);
 
-  const formattedPrompt = `\n\nHuman: ${prompt}\n\nAssistant:`;
+  const formattedMessages = contextMessages
+    .map(
+      msg => `${msg.role === "user" ? "Human" : "Assistant"}: ${msg.content}`,
+    )
+    .join("\n\n");
+
+  const formattedPrompt = `${formattedMessages}\n\nHuman: ${prompt}\n\nAssistant:`;
 
   const encoder = new TextEncoder();
 

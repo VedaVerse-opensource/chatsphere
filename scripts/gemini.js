@@ -2,11 +2,18 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
 
-async function* geminiResponse(content, model) {
+async function* geminiResponse(content, model, contextMessages) {
   try {
     const geminiModel = genAI.getGenerativeModel({ model: model });
 
-    const result = await geminiModel.generateContentStream(content);
+    const chat = geminiModel.startChat({
+      history: contextMessages.map(msg => ({
+        role: msg.role,
+        parts: msg.content,
+      })),
+    });
+
+    const result = await chat.sendMessageStream(content);
     for await (const chunk of result.stream) {
       yield chunk.text();
     }
@@ -16,16 +23,16 @@ async function* geminiResponse(content, model) {
   }
 }
 
-export async function* gemini15ProResponse(content) {
-  yield* geminiResponse(content, "gemini-1.5-pro");
+export async function* gemini15ProResponse(content, contextMessages) {
+  yield* geminiResponse(content, "gemini-1.5-pro", contextMessages);
 }
 
-export async function* gemini15FlashResponse(content) {
-  yield* geminiResponse(content, "gemini-1.5-flash");
+export async function* gemini15FlashResponse(content, contextMessages) {
+  yield* geminiResponse(content, "gemini-1.5-flash", contextMessages);
 }
 
-export async function* gemini10ProResponse(content) {
-  yield* geminiResponse(content, "gemini-1.0-pro");
+export async function* gemini10ProResponse(content, contextMessages) {
+  yield* geminiResponse(content, "gemini-1.0-pro", contextMessages);
 }
 
 export default gemini10ProResponse;
