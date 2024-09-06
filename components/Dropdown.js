@@ -71,9 +71,20 @@ const DropdownComponent = ({
           }),
           option: (provided, state) => ({
             ...provided,
-            backgroundColor: "transparent",
-            color: state.isDisabled ? "#cfd6e3" : "#000",
+            backgroundColor: state.isDisabled
+              ? isDarkMode
+                ? "#374151"
+                : "#f3f4f6"
+              : "transparent",
+            color: state.isDisabled
+              ? isDarkMode
+                ? "#9ca3af"
+                : "#6b7280"
+              : isDarkMode
+              ? "#ffffff"
+              : "#000000",
             cursor: state.isDisabled ? "not-allowed" : "default",
+            opacity: state.isDisabled ? 0.5 : 1,
           }),
         }}
         className='react-select-container'
@@ -87,7 +98,7 @@ const DropdownComponent = ({
           option: ({ isFocused, isSelected, isDisabled }) =>
             `py-2 px-3 ${
               isDisabled
-                ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+                ? "text-gray-400 dark:text-gray-500 cursor-not-allowed"
                 : isFocused
                 ? "bg-gray-100 dark:bg-gray-700"
                 : isSelected
