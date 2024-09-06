@@ -1,19 +1,13 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import DropdownComponent from "./Dropdown";
 import ApiKeyDialog from "./ApiKeyDialog";
 import {
   IoMenu,
-  IoDocumentTextOutline,
   IoShareOutline,
-  IoSunnyOutline,
-  IoMoonOutline,
-  IoStarOutline,
   IoPersonCircleOutline,
   IoLogoGithub,
-  IoClose,
   IoSearchOutline,
   IoChatbubbleOutline,
 } from "react-icons/io5";
@@ -26,7 +20,6 @@ const Navbar = ({ selectedModel, onModelChange, mode, onModeChange }) => {
   const [lastSearchModel, setLastSearchModel] = useState(
     "Select Search Engine",
   );
-  const router = useRouter();
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -203,12 +196,12 @@ const Navbar = ({ selectedModel, onModelChange, mode, onModeChange }) => {
                 {mode === "chatbot" ? (
                   <>
                     <IoChatbubbleOutline size={20} className='mr-1' />
-                    <span>Chat</span>
+                    <span>AI ChatBot Mode</span>
                   </>
                 ) : (
                   <>
                     <IoSearchOutline size={20} className='mr-1' />
-                    <span>Search</span>
+                    <span>AI Search Engine Mode</span>
                   </>
                 )}
               </button>
