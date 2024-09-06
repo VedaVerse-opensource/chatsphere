@@ -73,13 +73,13 @@ const DropdownComponent = ({
             ...provided,
             backgroundColor: state.isDisabled
               ? isDarkMode
-                ? "#374151"
+                ? "transparent"
                 : "#f3f4f6"
               : "transparent",
             color: state.isDisabled
               ? isDarkMode
-                ? "#9ca3af"
-                : "#6b7280"
+                ? "#1d2126"
+                : "#1d2126"
               : isDarkMode
               ? "#ffffff"
               : "#000000",
@@ -98,7 +98,7 @@ const DropdownComponent = ({
           option: ({ isFocused, isSelected, isDisabled }) =>
             `py-2 px-3 ${
               isDisabled
-                ? "text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                ? "text-gray-400 dark:text-gray-800 cursor-not-allowed"
                 : isFocused
                 ? "bg-gray-100 dark:bg-gray-700"
                 : isSelected
