@@ -85,6 +85,16 @@ const Navbar = ({ selectedModel, onModelChange }) => {
         },
       ],
     },
+    {
+      label: "Perplexity",
+      options: [
+        {
+          label: "Mixtral 7B Instruct",
+          value: "perplexityApiKey",
+          name: "mixtral-7b-instruct",
+        },
+      ],
+    },
   ];
 
   const handleModelChange = name => {

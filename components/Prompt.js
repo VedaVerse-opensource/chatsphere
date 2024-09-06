@@ -14,6 +14,7 @@ import {
 import { getClaudeResponse } from "@/scripts/claude";
 import ChatContainer from "./ChatContainer";
 import ChatInput from "./ChatInput";
+import perplexityResponse from "../scripts/perplexity";
 
 const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
   const [inputText, setInputText] = useState("");
@@ -129,6 +130,8 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
         return gemini15FlashResponse(content, contextMessages);
       case "gemini-1.0-pro":
         return gemini10ProResponse(content, contextMessages);
+      case "mixtral-7b-instruct":
+        return perplexityResponse(content, contextMessages);
       default:
         throw new Error("Unsupported model selected");
     }

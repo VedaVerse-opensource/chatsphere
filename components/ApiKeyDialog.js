@@ -12,6 +12,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
   const [openAiKey, setOpenAiKey] = useState("");
   const [geminiKey, setGeminiKey] = useState("");
   const [claudeKey, setClaudeKey] = useState("");
+  const [perplexityKey, setPerplexityKey] = useState("");
   const [activeSection, setActiveSection] = useState("setApiKeys");
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -21,11 +22,13 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       const storedOpenAiKey = localStorage.getItem("openAiApiKey");
       const storedGeminiKey = localStorage.getItem("geminiApiKey");
       const storedClaudeKey = localStorage.getItem("claudeApiKey");
+      const storedPerplexityKey = localStorage.getItem("perplexityApiKey");
 
       if (storedGroqKey) setGroqKey(storedGroqKey);
       if (storedOpenAiKey) setOpenAiKey(storedOpenAiKey);
       if (storedGeminiKey) setGeminiKey(storedGeminiKey);
       if (storedClaudeKey) setClaudeKey(storedClaudeKey);
+      if (storedPerplexityKey) setPerplexityKey(storedPerplexityKey);
 
       setIsDarkMode(document.documentElement.classList.contains("dark"));
     }
@@ -37,6 +40,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       localStorage.setItem("geminiApiKey", geminiKey);
       localStorage.setItem("groqApiKey", groqKey);
       localStorage.setItem("claudeKey", claudeKey);
+      localStorage.setItem("perplexityApiKey", perplexityKey);
     }
     onClose();
   };
@@ -51,7 +55,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
   const renderSectionContent = () => {
     if (activeSection === "setApiKeys") {
       return (
-        <div className='p-4 sm:p-6 md:p-8 h-full overflow-y-auto'>
+        <div className='space-y-4'>
           <h2 className='text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 whitespace-nowrap text-primary'>
             Set API Keys
           </h2>
@@ -72,8 +76,13 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
               value: claudeKey,
               onChange: setClaudeKey,
             },
+            {
+              label: "Perplexity API Key",
+              value: perplexityKey,
+              onChange: setPerplexityKey,
+            },
           ].map(({ label, value, onChange }) => (
-            <div key={label} className='mb-4 sm:mb-6'>
+            <div key={label}>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2'>
                 {label}
               </label>
@@ -86,12 +95,14 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
               />
             </div>
           ))}
-          <button
-            className='mt-4 bg-primary text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md text-sm sm:text-lg hover:bg-opacity-90 transition-colors'
-            onClick={handleSave}
-          >
-            Save
-          </button>
+          <div className='pt-4'>
+            <button
+              className='w-full bg-primary text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md text-sm sm:text-lg hover:bg-opacity-90 transition-colors'
+              onClick={handleSave}
+            >
+              Save
+            </button>
+          </div>
         </div>
       );
     }
@@ -144,31 +155,35 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
 
   return (
     <Dialog onClose={onClose}>
-      <div className='flex flex-col sm:flex-row h-[80vh]'>
-        <div className='w-full sm:w-1/4 bg-gray-100 dark:bg-gray-900 p-4 sm:p-6 overflow-y-auto'>
-          <div className='flex flex-row sm:flex-col space-x-2 sm:space-x-0 sm:space-y-2'>
-            {[
-              { id: "setApiKeys", label: "Set API Keys" },
-              { id: "settings", label: "Settings" },
-              { id: "howToUse", label: "How to Use?" },
-            ].map(({ id, label }) => (
-              <button
-                key={id}
-                className={`flex-shrink-0 text-center sm:text-left p-2 sm:p-3 rounded-md text-sm sm:text-base transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${
-                  activeSection === id
-                    ? "bg-primary text-white"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
-                }`}
-                onClick={() => setActiveSection(id)}
-              >
-                {label}
-              </button>
-            ))}
+      <div className='flex flex-col h-full'>
+        <div className='flex flex-col sm:flex-row flex-grow overflow-hidden'>
+          <div className='w-full sm:w-1/4 bg-gray-100 dark:bg-gray-900 p-4 sm:p-6 overflow-y-auto'>
+            <div className='flex flex-row sm:flex-col space-x-2 sm:space-x-0 sm:space-y-2'>
+              {[
+                { id: "setApiKeys", label: "Set API Keys" },
+                { id: "settings", label: "Settings" },
+                { id: "howToUse", label: "How to Use?" },
+              ].map(({ id, label }) => (
+                <button
+                  key={id}
+                  className={`flex-shrink-0 text-center sm:text-left p-2 sm:p-3 rounded-md text-sm sm:text-base transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${
+                    activeSection === id
+                      ? "bg-primary text-white"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
+                  }`}
+                  onClick={() => setActiveSection(id)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className='w-full sm:w-3/4 overflow-hidden'>
-          {renderSectionContent()}
+          <div className='w-full sm:w-3/4 flex flex-col overflow-hidden'>
+            <div className='flex-grow overflow-y-auto p-4 sm:p-6 md:p-8'>
+              {renderSectionContent()}
+            </div>
+          </div>
         </div>
       </div>
     </Dialog>
