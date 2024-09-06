@@ -25,6 +25,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       const storedClaudeKey = localStorage.getItem("claudeApiKey");
       const storedPerplexityKey = localStorage.getItem("perplexityApiKey");
       const storedExaKey = localStorage.getItem("exaApiKey");
+      const storedTheme = localStorage.getItem("theme");
 
       if (storedGroqKey) setGroqKey(storedGroqKey);
       if (storedOpenAiKey) setOpenAiKey(storedOpenAiKey);
@@ -33,7 +34,8 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       if (storedPerplexityKey) setPerplexityKey(storedPerplexityKey);
       if (storedExaKey) setExaKey(storedExaKey);
 
-      setIsDarkMode(document.documentElement.classList.contains("dark"));
+      setIsDarkMode(storedTheme === "dark");
+      document.documentElement.classList.toggle("dark", storedTheme === "dark");
     }
   }, []);
 
@@ -53,7 +55,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     document.documentElement.classList.toggle("dark", newMode);
-    localStorage.setItem("darkMode", newMode);
+    localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
   const renderSectionContent = () => {

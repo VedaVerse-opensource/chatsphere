@@ -23,6 +23,17 @@ const Navbar = ({ selectedModel, onModelChange, mode, onModeChange }) => {
   const menuRef = useRef(null);
 
   useEffect(() => {
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme === "dark") {
+      setIsDarkMode(true);
+      document.documentElement.classList.add("dark");
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const groqKeyStored = localStorage.getItem("groqApiKey");
       const openAiKeyStored = localStorage.getItem("openAiApiKey");
@@ -143,6 +154,13 @@ const Navbar = ({ selectedModel, onModelChange, mode, onModeChange }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    document.documentElement.classList.toggle("dark", newMode);
+    localStorage.setItem("theme", newMode ? "dark" : "light");
+  };
 
   return (
     <nav
