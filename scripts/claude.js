@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-export async function getClaudeResponse(prompt) {
+export async function* getClaudeResponse(prompt) {
   try {
     let apiKey = "";
     if (typeof window !== "undefined") {
@@ -14,18 +14,28 @@ export async function getClaudeResponse(prompt) {
     }
 
     console.log("Sending request to /api/claude");
-    const response = await axios.post("/api/claude", {
-      prompt: prompt,
-      apiKey: apiKey,
+    const response = await fetch("/api/claude", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt, apiKey }),
     });
 
-    console.log("Received response from /api/claude");
-    return response.data.completion;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      yield decoder.decode(value);
+    }
   } catch (error) {
-    console.error(
-      "Error calling Claude API:",
-      error.response ? error.response.data : error.message,
-    );
-    throw error;
+    console.error("Error calling Claude API:", error);
+    yield "An error occurred while fetching response from Claude";
   }
 }

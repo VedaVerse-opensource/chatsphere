@@ -2,43 +2,60 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 
 export async function POST(request) {
-  try {
-    const { prompt, apiKey } = await request.json();
+  const { prompt, apiKey } = await request.json();
 
-    console.log("Received request with prompt:", prompt);
-    console.log("API Key present:", !!apiKey);
+  console.log("Received request with prompt:", prompt);
+  console.log("API Key present:", !!apiKey);
 
-    // Format the prompt correctly
-    const formattedPrompt = `\n\nHuman: ${prompt}\n\nAssistant:`;
+  const formattedPrompt = `\n\nHuman: ${prompt}\n\nAssistant:`;
 
-    const response = await axios.post(
-      "https://api.anthropic.com/v1/complete",
-      {
-        prompt: formattedPrompt,
-        model: "claude-v1",
-        max_tokens_to_sample: 300,
-        stop_sequences: ["\n\nHuman:"],
-        temperature: 0.8,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "X-API-Key": apiKey,
-          "anthropic-version": "2023-06-01",
-        },
-      },
-    );
+  const encoder = new TextEncoder();
 
-    console.log("Received response from Claude API");
-    return NextResponse.json(response.data);
-  } catch (error) {
-    console.error(
-      "Error calling Claude API:",
-      error.response ? error.response.data : error.message,
-    );
-    return NextResponse.json(
-      { error: "Error calling Claude API", details: error.message },
-      { status: 500 },
-    );
-  }
+  const stream = new ReadableStream({
+    async start(controller) {
+      try {
+        const response = await axios.post(
+          "https://api.anthropic.com/v1/complete",
+          {
+            prompt: formattedPrompt,
+            model: "claude-v1",
+            max_tokens_to_sample: 300,
+            stop_sequences: ["\n\nHuman:"],
+            temperature: 0.8,
+            stream: true,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-API-Key": apiKey,
+              "anthropic-version": "2023-06-01",
+            },
+            responseType: "stream",
+          },
+        );
+
+        response.data.on("data", chunk => {
+          const lines = chunk.toString().split("\n");
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              const data = JSON.parse(line.slice(6));
+              if (data.completion) {
+                controller.enqueue(encoder.encode(data.completion));
+              }
+            }
+          }
+        });
+
+        response.data.on("end", () => {
+          controller.close();
+        });
+      } catch (error) {
+        console.error("Error calling Claude API:", error);
+        controller.enqueue(encoder.encode("An error occurred"));
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream);
 }
