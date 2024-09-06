@@ -39,11 +39,13 @@ body {
 }
 
 .container {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-wrap: wrap;
   align-items: center;
-  padding: 5vh 4vw;
+  justify-content: center;
+  gap: 2vw;
+  padding: 2vh 4vw;
 }
 
 .title {
@@ -77,10 +79,12 @@ body {
 
 .prompt-container {
   width: 100%;
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
 }
 
 .response-text {
@@ -103,7 +107,8 @@ body {
 .prompt-box {
   display: flex;
   flex-direction: row;
-  width: 85%;
+  width: 100%;
+  max-width: 1000px;
   background-color: #ddd;
   padding: 15px;
   border-radius: 10px;

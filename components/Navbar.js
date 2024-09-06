@@ -115,11 +115,11 @@ const Navbar = ({ selectedModel, onModelChange }) => {
 
   return (
     <nav
-      className={`bg-background-light fixed w-full top-0 dark:bg-background-dark z-50 ${
+      className={`bg-background-light fixed w-full top-0 left-0 right-0 dark:bg-background-dark z-50 ${
         isDarkMode ? "dark" : ""
       }`}
     >
-      <div className='max-w-7xl mx-auto px-2 sm:px-4 md:px-6'>
+      <div className='w-full px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between h-14 sm:h-16 md:h-20'>
           <div className='flex items-center space-x-2 sm:space-x-3 md:space-x-4'>
             <button
