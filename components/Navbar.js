@@ -202,7 +202,7 @@ const Navbar = ({ selectedModel, onModelChange, mode, onModeChange }) => {
           </div>
           <div className='flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
             <div className='hidden sm:flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
-              <button
+              {/* <button
                 onClick={toggleMode}
                 className='text-secondary hover:text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-1 sm:p-1.5 md:p-2 rounded-full flex items-center'
                 title={
@@ -222,7 +222,7 @@ const Navbar = ({ selectedModel, onModelChange, mode, onModeChange }) => {
                     <span>AI Search Engine Mode</span>
                   </>
                 )}
-              </button>
+              </button> */}
               <NavButtons />
             </div>
             <div className='relative' ref={menuRef}>
