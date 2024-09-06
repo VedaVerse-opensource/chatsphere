@@ -13,6 +13,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
   const [geminiKey, setGeminiKey] = useState("");
   const [claudeKey, setClaudeKey] = useState("");
   const [perplexityKey, setPerplexityKey] = useState("");
+  const [exaKey, setExaKey] = useState("");
   const [activeSection, setActiveSection] = useState("setApiKeys");
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -23,12 +24,14 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       const storedGeminiKey = localStorage.getItem("geminiApiKey");
       const storedClaudeKey = localStorage.getItem("claudeApiKey");
       const storedPerplexityKey = localStorage.getItem("perplexityApiKey");
+      const storedExaKey = localStorage.getItem("exaApiKey");
 
       if (storedGroqKey) setGroqKey(storedGroqKey);
       if (storedOpenAiKey) setOpenAiKey(storedOpenAiKey);
       if (storedGeminiKey) setGeminiKey(storedGeminiKey);
       if (storedClaudeKey) setClaudeKey(storedClaudeKey);
       if (storedPerplexityKey) setPerplexityKey(storedPerplexityKey);
+      if (storedExaKey) setExaKey(storedExaKey);
 
       setIsDarkMode(document.documentElement.classList.contains("dark"));
     }
@@ -41,6 +44,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       localStorage.setItem("groqApiKey", groqKey);
       localStorage.setItem("claudeKey", claudeKey);
       localStorage.setItem("perplexityApiKey", perplexityKey);
+      localStorage.setItem("exaApiKey", exaKey);
     }
     onClose();
   };
@@ -80,6 +84,11 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
               label: "Perplexity API Key",
               value: perplexityKey,
               onChange: setPerplexityKey,
+            },
+            {
+              label: "Exa.ai API Key",
+              value: exaKey,
+              onChange: setExaKey,
             },
           ].map(({ label, value, onChange }) => (
             <div key={label}>

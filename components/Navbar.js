@@ -14,12 +14,18 @@ import {
   IoPersonCircleOutline,
   IoLogoGithub,
   IoClose,
+  IoSearchOutline,
+  IoChatbubbleOutline,
 } from "react-icons/io5";
 
-const Navbar = ({ selectedModel, onModelChange }) => {
+const Navbar = ({ selectedModel, onModelChange, mode, onModeChange }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [lastChatbotModel, setLastChatbotModel] = useState("Select Model");
+  const [lastSearchModel, setLastSearchModel] = useState(
+    "Select Search Engine",
+  );
   const router = useRouter();
   const menuRef = useRef(null);
 
@@ -42,6 +48,13 @@ const Navbar = ({ selectedModel, onModelChange }) => {
   }, []);
 
   const data = [
+    {
+      label: "Search Engines",
+      options: [
+        { label: "Perplexity", value: "perplexityApiKey", name: "perplexity" },
+        { label: "Exa.ai", value: "exaApiKey", name: "exa" },
+      ],
+    },
     {
       label: "Groq",
       options: [
@@ -100,6 +113,11 @@ const Navbar = ({ selectedModel, onModelChange }) => {
   const handleModelChange = name => {
     onModelChange(name);
     setIsMenuOpen(false);
+    if (mode === "chatbot") {
+      setLastChatbotModel(name);
+    } else {
+      setLastSearchModel(name);
+    }
   };
 
   const handleDialogClose = () => {
@@ -108,6 +126,16 @@ const Navbar = ({ selectedModel, onModelChange }) => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleMode = () => {
+    const newMode = mode === "chatbot" ? "search" : "chatbot";
+    onModeChange(newMode);
+    if (newMode === "chatbot") {
+      onModelChange(lastChatbotModel);
+    } else {
+      onModelChange(lastSearchModel);
+    }
   };
 
   useEffect(() => {
@@ -152,14 +180,38 @@ const Navbar = ({ selectedModel, onModelChange }) => {
             <div className='hidden sm:block w-56 lg:w-64'>
               <DropdownComponent
                 data={data}
-                placeholder={selectedModel}
+                placeholder={
+                  mode === "chatbot" ? "Select Model" : "Select Search Engine"
+                }
                 onSelect={handleModelChange}
                 isDarkMode={isDarkMode}
+                mode={mode}
               />
             </div>
           </div>
           <div className='flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
             <div className='hidden sm:flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
+              <button
+                onClick={toggleMode}
+                className='text-secondary hover:text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-1 sm:p-1.5 md:p-2 rounded-full flex items-center'
+                title={
+                  mode === "chatbot"
+                    ? "Switch to Search Engine"
+                    : "Switch to Chatbot"
+                }
+              >
+                {mode === "chatbot" ? (
+                  <>
+                    <IoChatbubbleOutline size={20} className='mr-1' />
+                    <span>Chat</span>
+                  </>
+                ) : (
+                  <>
+                    <IoSearchOutline size={20} className='mr-1' />
+                    <span>Search</span>
+                  </>
+                )}
+              </button>
               <NavButtons />
             </div>
             <div className='relative' ref={menuRef}>
@@ -178,9 +230,14 @@ const Navbar = ({ selectedModel, onModelChange }) => {
                   <div className='sm:hidden px-4 py-2'>
                     <DropdownComponent
                       data={data}
-                      placeholder={selectedModel}
+                      placeholder={
+                        mode === "chatbot"
+                          ? "Select Model"
+                          : "Select Search Engine"
+                      }
                       onSelect={handleModelChange}
                       isDarkMode={isDarkMode}
+                      mode={mode}
                     />
                   </div>
                   <button

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
-const DropdownComponent = ({ data, placeholder, onSelect }) => {
+const DropdownComponent = ({
+  data,
+  placeholder,
+  onSelect,
+  isDarkMode,
+  mode,
+}) => {
   const [selectedOption, setSelectedOption] = useState(() => {
     if (typeof window !== "undefined") {
       const storedModel = localStorage.getItem("selectedModel");
@@ -17,20 +23,28 @@ const DropdownComponent = ({ data, placeholder, onSelect }) => {
   const [optionsWithState, setOptionsWithState] = useState([]);
 
   useEffect(() => {
-    const updatedOptions = data.map(provider => ({
-      ...provider,
-      options: provider.options.map(option => ({
-        ...option,
-        isDisabled: !localStorage.getItem(option.value),
-      })),
-    }));
+    const updatedOptions = data
+      .map(provider => ({
+        ...provider,
+        options: provider.options
+          .filter(
+            option =>
+              (mode === "search" && provider.label === "Search Engines") ||
+              (mode === "chatbot" && provider.label !== "Search Engines"),
+          )
+          .map(option => ({
+            ...option,
+            isDisabled: !localStorage.getItem(option.value),
+          })),
+      }))
+      .filter(provider => provider.options.length > 0);
     setOptionsWithState(updatedOptions);
-  }, [data]);
+  }, [data, mode]);
 
   const handleChange = selectedOption => {
     setSelectedOption(selectedOption);
     if (onSelect) {
-      onSelect(selectedOption ? selectedOption.name : "Select Model");
+      onSelect(selectedOption ? selectedOption.name : placeholder);
     }
   };
 

@@ -12,6 +12,7 @@ const Home = () => {
     }
     return "Select Model";
   });
+  const [mode, setMode] = useState("chatbot");
   const [isChatActive, setIsChatActive] = useState(false);
 
   const handleModelChange = model => {
@@ -21,9 +22,24 @@ const Home = () => {
     }
   };
 
+  const handleModeChange = newMode => {
+    setMode(newMode);
+    // Reset selectedModel when changing modes
+    if (newMode === "chatbot") {
+      setSelectedModel("Select Model");
+    } else {
+      setSelectedModel("Select Search Engine");
+    }
+  };
+
   return (
     <div className='flex-grow container px-2 sm:px-4 md:px-6 lg:px-8 flex flex-col'>
-      <Navbar selectedModel={selectedModel} onModelChange={handleModelChange} />
+      <Navbar
+        selectedModel={selectedModel}
+        onModelChange={handleModelChange}
+        mode={mode}
+        onModeChange={handleModeChange}
+      />
       {!isChatActive && (
         <>
           <div className='flex items-center justify-center mt-4 sm:mt-8 md:mt-12'>
