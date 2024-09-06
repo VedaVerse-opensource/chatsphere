@@ -27,12 +27,12 @@ const ChatInput = ({
 
   return (
     <div className='py-2 sm:py-4 px-2 sm:px-4 w-full sm:w-[80%] md:w-[70%] lg:w-[60%] fixed bottom-0 flex items-center'>
-      <div className='flex-grow bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-full'>
+      <div className='flex-grow bg-gray-100 dark:bg-dark-surface border border-gray-300 dark:border-gray-600 rounded-full'>
         <div className='flex items-center px-2 sm:px-4 py-1 sm:py-2'>
           <FileUpload onFileSelect={onFileSelect} />
           <textarea
             ref={textareaRef}
-            className='flex-grow bg-transparent focus:outline-none rounded-full pl-2 sm:pl-4 text-gray-800 dark:text-gray-200 text-xs sm:text-sm placeholder-gray-400 resize-none overflow-hidden py-1 sm:py-2'
+            className='flex-grow bg-transparent focus:outline-none rounded-full pl-2 sm:pl-4 text-gray-800 dark:text-dark-text text-xs sm:text-sm placeholder-gray-400 resize-none overflow-hidden py-1 sm:py-2'
             placeholder='Explore with ChatSphere'
             value={inputText}
             onChange={e => setInputText(e.target.value)}

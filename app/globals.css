@@ -11,19 +11,14 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-start-rgb: 26, 26, 26;
+    --background-end-rgb: 26, 26, 26;
   }
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
@@ -39,7 +34,8 @@ body {
 }
 
 .dark-mode {
-  background-color: #333;
+  background-color: #1a1a1a;
+  color: #ffffff;
 }
 
 .container {
@@ -74,7 +70,7 @@ body {
 }
 
 .dark-mode .title-text {
-  color: #fff;
+  color: #ffffff;
 }
 
 /* Prompt styles */
@@ -187,7 +183,7 @@ body {
 }
 
 .dark-mode {
-  background-color: #333;
+  background-color: #1a1a1a;
 }
 
 .left-section,
@@ -206,4 +202,55 @@ body {
 
 .icon-button:last-child {
   margin-right: 0;
+}
+
+@layer components {
+  .react-select-container .react-select__control {
+    @apply bg-white dark:bg-dark-surface border border-gray-300 dark:border-gray-600 rounded-lg hover:border-primary;
+  }
+
+  .react-select-container .react-select__control--is-focused {
+    @apply border-primary shadow-none;
+  }
+
+  .react-select-container .react-select__menu {
+    @apply bg-white dark:bg-dark-surface border border-gray-300 dark:border-gray-600;
+  }
+
+  .react-select-container .react-select__option {
+    @apply text-gray-900 dark:text-white;
+  }
+
+  .react-select-container .react-select__option--is-focused {
+    @apply bg-gray-100 dark:bg-gray-700;
+  }
+
+  .react-select-container .react-select__option--is-selected {
+    @apply bg-primary text-white;
+  }
+
+  .react-select-container .react-select__input-container,
+  .react-select-container .react-select__placeholder,
+  .react-select-container .react-select__single-value {
+    @apply text-gray-900 dark:text-white;
+  }
+
+  .react-select__option--is-disabled {
+    @apply text-gray-300 dark:text-gray-600 cursor-not-allowed !important;
+  }
+
+  .react-select__option--is-disabled:hover {
+    @apply bg-transparent !important;
+  }
+
+  .react-select__group-heading {
+    @apply text-primary dark:text-primary !important;
+  }
+
+  /* Ensure disabled options don't change on hover or focus */
+  .react-select__option--is-disabled:hover,
+  .react-select__option--is-disabled:focus,
+  .react-select__option--is-disabled:active {
+    @apply bg-transparent text-gray-300 dark:text-gray-600 !important;
+  }
 }

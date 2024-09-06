@@ -13,9 +13,9 @@ const Cards = () => {
       {cardsData.map((text, index) => (
         <div
           key={index}
-          className='bg-quaternary dark:bg-secondary rounded-2xl border border-red-200 p-4 sm:p-6 hover:shadow-lg transition-shadow duration-300 text-center cursor-pointer flex justify-center items-center'
+          className='bg-quaternary dark:bg-dark-surface rounded-2xl border border-red-200 dark:border-gray-600 p-4 sm:p-6 hover:shadow-lg transition-shadow duration-300 text-center cursor-pointer flex justify-center items-center'
         >
-          <p className='text-secondary text-xs sm:text-sm md:text-base dark:text-quaternary'>
+          <p className='text-secondary text-xs sm:text-sm md:text-base dark:text-dark-text'>
             {text}
           </p>
         </div>

@@ -23,12 +23,18 @@ module.exports = {
         },
         background: {
           light: "#efefef", // New light theme background color
-          dark: "#444444", // New dark theme background color (same as secondary)
+          dark: "#181d26", // New dark theme background color (same as secondary)
         },
         text: {
           light: "#000000", // Using secondary color for light mode text
           DEFAULT: "#000000", // Using secondary color for default text
           dark: "#ffffff", // Using light background color for dark mode text
+        },
+        dark: {
+          background: "#181d26",
+          surface: "#1f242b",
+          dialog: "#181d26",
+          text: "#ffffff",
         },
       },
       backgroundImage: {

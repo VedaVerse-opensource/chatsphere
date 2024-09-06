@@ -8,7 +8,7 @@ import CodeBlock from "./CodeBlock";
 export const UserBubble = ({ text }) => (
   <div className='flex justify-end w-full mb-3 sm:mb-4'>
     <div className='flex items-end space-x-2 max-w-[85%]'>
-      <div className='bg-white text-black rounded-2xl py-2 sm:py-3 px-3 sm:px-4'>
+      <div className='bg-dark-surface text-white rounded-2xl py-2 sm:py-3 px-3 sm:px-4 border dark:border-gray-600 w-full'>
         <p className='text-sm sm:text-md leading-relaxed'>{text}</p>
       </div>
       <div className='flex-shrink-0 mb-1'>
@@ -33,7 +33,7 @@ export const AIBubble = ({ text }) => (
           className='sm:w-6 sm:h-6 md:w-7 md:h-7'
         />
       </div>
-      <div className='bg-[#dddddd] dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-2xl py-2 sm:py-3 px-3 sm:px-4 border w-full'>
+      <div className='bg-[#dddddd] dark:bg-dark-surface text-gray-800 dark:text-dark-text rounded-2xl py-2 sm:py-3 px-3 sm:px-4 border dark:border-gray-600 w-full'>
         <ReactMarkdown
           className='text-sm sm:text-md whitespace-pre-wrap font-sans leading-relaxed'
           rehypePlugins={[rehypeRaw]}

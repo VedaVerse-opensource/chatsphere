@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
-const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
+const DropdownComponent = ({ data, placeholder, onSelect }) => {
   const [selectedOption, setSelectedOption] = useState(() => {
     if (typeof window !== "undefined") {
       const storedModel = localStorage.getItem("selectedModel");
@@ -34,98 +34,62 @@ const DropdownComponent = ({ data, placeholder, onSelect, isDarkMode }) => {
     }
   };
 
-  const customStyles = {
-    control: (base, state) => ({
-      ...base,
-      backgroundColor: isDarkMode ? "#444444" : "#efefef",
-      borderColor: state.isFocused ? "#e73529" : "transparent",
-      borderRadius: "8px",
-      padding: "2px 4px",
-      minHeight: "32px",
-      boxShadow: state.isFocused ? "0 0 0 3px rgba(231, 53, 41, 0.3)" : "none",
-      transition: "all 0.3s ease",
-      "&:hover": {
-        borderColor: "#e73529",
-      },
-      cursor: "pointer",
-    }),
-    placeholder: base => ({
-      ...base,
-      color: isDarkMode ? "#ffffff" : "#000000",
-      fontSize: "16px",
-      fontWeight: "500",
-    }),
-    singleValue: base => ({
-      ...base,
-      color: isDarkMode ? "#ffffff" : "#000000",
-      fontSize: "16px",
-      fontWeight: "500",
-    }),
-    menu: base => ({
-      ...base,
-      backgroundColor: isDarkMode ? "#444444" : "#ffffff",
-      borderRadius: "10px",
-      boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.1)",
-      overflow: "hidden",
-      marginTop: "5px",
-    }),
-    option: (base, state) => ({
-      ...base,
-      color: state.isDisabled ? "#d9d9d9" : isDarkMode ? "#ffffff" : "#000000",
-      padding: "10px 15px",
-      cursor: state.isDisabled ? "not-allowed" : "pointer",
-      transition: "background-color 0.2s ease",
-    }),
-    dropdownIndicator: base => ({
-      ...base,
-      color: isDarkMode ? "#ffffff" : "#e73529",
-      padding: "0px 8px",
-      transition: "color 0.3s ease",
-      "&:hover": {
-        color: isDarkMode ? "#ffffff" : "#e73529",
-      },
-      cursor: "pointer",
-    }),
-    indicatorSeparator: () => ({
-      display: "none",
-    }),
-    menuList: base => ({
-      ...base,
-      padding: "0",
-    }),
-    group: base => ({
-      ...base,
-      padding: "10px 0",
-    }),
-    groupHeading: base => ({
-      ...base,
-      // backgroundColor: isDarkMode ? "#444444" : "#efefef",
-      color: isDarkMode ? "#ffffff" : "#e73529",
-      padding: "8px 15px",
-      // fontWeight: "bold",
-      fontSize: "14px",
-      marginBottom: "5px",
-    }),
-  };
-
   return (
     <div className='min-w-[120px] sm:min-w-[160px] md:min-w-[200px]'>
       <Select
-        styles={customStyles}
         options={optionsWithState}
         value={selectedOption}
         placeholder={placeholder}
         onChange={handleChange}
         isSearchable={true}
         isClearable={false}
-        className='focus:outline-none'
         classNamePrefix='react-select'
         formatGroupLabel={data => (
-          <div>
-            <strong>{data.label}</strong>
+          <div className='font-bold text-primary dark:text-primary'>
+            {data.label}
           </div>
         )}
         isOptionDisabled={option => option.isDisabled}
+        styles={{
+          control: provided => ({
+            ...provided,
+            boxShadow: "none",
+          }),
+          option: (provided, state) => ({
+            ...provided,
+            backgroundColor: "transparent",
+            color: state.isDisabled ? "#cfd6e3" : "#000",
+            cursor: state.isDisabled ? "not-allowed" : "default",
+          }),
+        }}
+        className='react-select-container'
+        classNames={{
+          control: () =>
+            "bg-white dark:bg-dark-surface border border-gray-300 dark:border-gray-600 rounded-lg hover:border-primary focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 transition-colors",
+          placeholder: () => "text-gray-500 dark:text-gray-400",
+          singleValue: () => "text-gray-900 dark:text-white",
+          menu: () =>
+            "bg-white dark:bg-dark-surface border border-gray-300 dark:border-gray-600 rounded-lg mt-1 shadow-lg",
+          option: ({ isFocused, isSelected, isDisabled }) =>
+            `py-2 px-3 ${
+              isDisabled
+                ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+                : isFocused
+                ? "bg-gray-100 dark:bg-gray-700"
+                : isSelected
+                ? "bg-primary text-white"
+                : ""
+            } ${
+              isSelected && !isFocused ? "bg-primary/10 dark:bg-primary/20" : ""
+            }`,
+          groupHeading: () =>
+            "text-primary dark:text-primary text-sm font-semibold py-2 px-3",
+          indicatorSeparator: () => "bg-gray-300 dark:bg-gray-600",
+          dropdownIndicator: () =>
+            "text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary",
+          clearIndicator: () =>
+            "text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary",
+        }}
       />
     </div>
   );
