@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import groqResponse from "../scripts/groq";
 import {
   gpt4Response,
@@ -16,13 +16,35 @@ import ChatContainer from "./ChatContainer";
 import ChatInput from "./ChatInput";
 import { perplexityResponse, perplexitySearch } from "../scripts/perplexity";
 import exaSearch from "../scripts/exa";
+import { saveChatHistory } from "@/utils/indexedDB";
 
-const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
+const Prompt = ({
+  selectedModel,
+  chatActive,
+  onChatStart,
+  currentChat,
+  onUpdateChatHistory,
+}) => {
   const [inputText, setInputText] = useState("");
   const [responses, setResponses] = useState([]);
   const [context, setContext] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
+
+  useEffect(() => {
+    if (currentChat) {
+      setResponses(currentChat.messages);
+      setContext(
+        currentChat.messages.reduce((acc, msg, index) => {
+          acc[index] = msg;
+          return acc;
+        }, {}),
+      );
+    } else {
+      setResponses([]);
+      setContext({});
+    }
+  }, [currentChat]);
 
   const handleFileSelect = file => {
     setUploadedFile(file);
@@ -33,7 +55,7 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
     if (inputText.trim() === "" && !uploadedFile) return;
 
     if (!chatActive) {
-      onChatStart();
+      onChatStart(inputText);
     }
 
     setIsLoading(true);
@@ -70,6 +92,31 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
         ...updatedContext,
         [responses.length + 1]: { ...newAIResponse, text: fullContent },
       });
+
+      const updatedChat = currentChat
+        ? {
+            ...currentChat,
+            messages: [
+              ...responses,
+              newUserResponse,
+              { ...newAIResponse, text: fullContent },
+            ],
+            timestamp: Date.now(), // Update timestamp for sorting
+          }
+        : {
+            id: Date.now(), // Add a unique id for new chats
+            title: inputText,
+            timestamp: Date.now(),
+            messages: [
+              newUserResponse,
+              { ...newAIResponse, text: fullContent },
+            ],
+          };
+
+      await saveChatHistory(updatedChat);
+
+      // Update chat history in the parent component
+      onUpdateChatHistory(updatedChat);
     } catch (error) {
       console.error("Error fetching response:", error);
       const errorResponse = {
@@ -89,6 +136,7 @@ const Prompt = ({ selectedModel, chatActive, onChatStart }) => {
     context,
     responses,
     uploadedFile,
+    currentChat,
   ]);
 
   const readFileContent = file => {

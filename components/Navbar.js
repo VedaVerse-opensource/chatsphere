@@ -9,9 +9,16 @@ import {
   IoPersonCircleOutline,
   IoLogoGithub,
   IoGlobeOutline,
+  IoAddCircleOutline,
 } from "react-icons/io5";
 
-const Navbar = ({ onModelChange, mode, onModeChange }) => {
+const Navbar = ({
+  onModelChange,
+  mode,
+  onModeChange,
+  onSidebarToggle,
+  onNewChat,
+}) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,6 +27,7 @@ const Navbar = ({ onModelChange, mode, onModeChange }) => {
     "Select Search Engine",
   );
   const menuRef = useRef(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
@@ -161,6 +169,11 @@ const Navbar = ({ onModelChange, mode, onModeChange }) => {
     localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+    onSidebarToggle();
+  };
+
   return (
     <nav
       className={`bg-background-light fixed w-full top-0 left-0 right-0 dark:bg-background-dark z-50 ${
@@ -172,21 +185,24 @@ const Navbar = ({ onModelChange, mode, onModeChange }) => {
           <div className='flex items-center space-x-2 sm:space-x-3 md:space-x-4'>
             <button
               className='text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-1 sm:p-2 rounded-full'
-              onClick={() => {
-                /* Handle hamburger menu click */
-              }}
-              title='Menu'
+              onClick={toggleSidebar}
+              title='Toggle Sidebar'
             >
               <IoMenu size={24} className='sm:w-6 sm:h-6 md:w-7 md:h-7' />
             </button>
-            <Image
-              src='/icons/file.svg'
-              alt='New Chat'
-              width={20}
-              height={20}
-              className='text-secondary dark:text-quaternary sm:w-5 sm:h-5 md:w-6 md:h-6'
+
+            {/* New Chat Icon */}
+            <button
+              className='text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-1 sm:p-2 rounded-full'
+              onClick={onNewChat}
               title='New Chat'
-            />
+            >
+              <IoAddCircleOutline
+                size={24}
+                className='sm:w-6 sm:h-6 md:w-7 md:h-7'
+              />
+            </button>
+
             <div className='hidden sm:block w-56 lg:w-64'>
               <DropdownComponent
                 data={data}

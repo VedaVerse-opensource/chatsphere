@@ -1,9 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Prompt from "@/components/Prompt";
 import Cards from "@/components/Cards";
 import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
+import { getChatHistory, saveChatHistory } from "@/utils/indexedDB";
 
 const Home = () => {
   const [selectedModel, setSelectedModel] = useState(() => {
@@ -14,6 +16,18 @@ const Home = () => {
   });
   const [mode, setMode] = useState("chatbot");
   const [isChatActive, setIsChatActive] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [currentChat, setCurrentChat] = useState(null);
+
+  useEffect(() => {
+    const fetchChatHistory = async () => {
+      const history = await getChatHistory();
+      const sortedHistory = history.sort((a, b) => b.timestamp - a.timestamp);
+      setChatHistory(sortedHistory);
+    };
+    fetchChatHistory();
+  }, []);
 
   const handleModelChange = model => {
     setSelectedModel(model);
@@ -24,12 +38,43 @@ const Home = () => {
 
   const handleModeChange = newMode => {
     setMode(newMode);
-    // Reset selectedModel when changing modes
     if (newMode === "chatbot") {
       setSelectedModel("Select Model");
     } else {
       setSelectedModel("Select Search Engine");
     }
+  };
+
+  const handleChatStart = async title => {
+    setIsChatActive(true);
+    const newChat = {
+      title,
+      timestamp: Date.now(),
+      messages: [],
+    };
+    await saveChatHistory(newChat);
+    setChatHistory([...chatHistory, newChat]);
+  };
+
+  const handleNewChat = () => {
+    setIsChatActive(false);
+    setCurrentChat(null);
+  };
+
+  const handleChatSelect = selectedChat => {
+    setCurrentChat(selectedChat);
+    setIsChatActive(true);
+    setIsSidebarOpen(false);
+  };
+
+  const handleUpdateChatHistory = updatedChat => {
+    setChatHistory(prevHistory => {
+      const newHistory = prevHistory.filter(chat => chat.id !== updatedChat.id);
+      return [updatedChat, ...newHistory].sort(
+        (a, b) => b.timestamp - a.timestamp,
+      );
+    });
+    setCurrentChat(updatedChat);
   };
 
   return (
@@ -39,6 +84,14 @@ const Home = () => {
         onModelChange={handleModelChange}
         mode={mode}
         onModeChange={handleModeChange}
+        onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+        onNewChat={handleNewChat}
+      />
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        chatHistory={chatHistory}
+        onChatSelect={handleChatSelect}
       />
       {!isChatActive && (
         <>
@@ -63,7 +116,9 @@ const Home = () => {
         <Prompt
           selectedModel={selectedModel}
           chatActive={isChatActive}
-          onChatStart={() => setIsChatActive(true)}
+          onChatStart={handleChatStart}
+          currentChat={currentChat}
+          onUpdateChatHistory={handleUpdateChatHistory}
         />
       </div>
     </div>
