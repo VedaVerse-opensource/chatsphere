@@ -1,5 +1,5 @@
 import React from "react";
-import { UserBubble, AIBubble } from "./ChatBubbles";
+import { UserBubble } from "./ChatBubbles";
 import Image from "next/image";
 
 const SearchResult = ({ result }) => (
@@ -37,7 +37,7 @@ const ChatContainer = ({ responses }) => {
             <UserBubble text={response.text} />
           ) : (
             <div className='flex items-end'>
-              <div className='flex-shrink-0 mr-3'>
+              <div className='flex-shrink-0 ml-3 mb-1'>
                 <Image
                   src='/icons/logo.svg'
                   alt='AI'
@@ -46,7 +46,7 @@ const ChatContainer = ({ responses }) => {
                   className='rounded-full'
                 />
               </div>
-              <div className='inline-block bg-gray-100 dark:bg-gray-700 rounded-lg p-3 shadow-sm'>
+              <div className='flex-grow inline-block bg-gray-100 dark:bg-gray-700 rounded-lg p-3 shadow-sm'>
                 {response.text.startsWith("Search Results:") ? (
                   <div>
                     <h2 className='text-xl font-bold mb-4 text-primary dark:text-primary/80'>
@@ -81,7 +81,9 @@ const ChatContainer = ({ responses }) => {
                       })}
                   </div>
                 ) : (
-                  <AIBubble text={response.text} />
+                  <p className='text-gray-800 dark:text-gray-200'>
+                    {response.text}
+                  </p>
                 )}
               </div>
             </div>
