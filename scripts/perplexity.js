@@ -49,4 +49,39 @@ async function* perplexityResponse(content, contextMessages) {
   }
 }
 
-export default perplexityResponse;
+async function* perplexitySearch(query) {
+  if (!perplexityApiKey) {
+    yield "Perplexity API key not found. Please set it in the settings.";
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/perplexity", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-perplexity-api-key": perplexityApiKey,
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || `HTTP error! status: ${response.status}`);
+    }
+
+    if (data.results) {
+      for (const result of data.results) {
+        yield `Title: ${result.title}\nURL: ${result.url}\nSnippet: ${result.snippet}\n\n`;
+      }
+    } else {
+      yield "No results found.";
+    }
+  } catch (error) {
+    console.error("Error in perplexitySearch:", error);
+    yield `An error occurred while fetching search results from Perplexity: ${error.message}`;
+  }
+}
+
+export { perplexityResponse, perplexitySearch };

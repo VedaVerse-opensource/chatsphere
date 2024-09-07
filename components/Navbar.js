@@ -8,11 +8,9 @@ import {
   IoShareOutline,
   IoPersonCircleOutline,
   IoLogoGithub,
-  IoSearchOutline,
-  IoChatbubbleOutline,
 } from "react-icons/io5";
 
-const Navbar = ({ selectedModel, onModelChange, mode, onModeChange }) => {
+const Navbar = ({ onModelChange, mode, onModeChange }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -202,28 +200,13 @@ const Navbar = ({ selectedModel, onModelChange, mode, onModeChange }) => {
           </div>
           <div className='flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
             <div className='hidden sm:flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
-              {/* <button
-                onClick={toggleMode}
-                className='text-secondary hover:text-primary dark:text-quaternary dark:hover:text-primary transition-colors p-1 sm:p-1.5 md:p-2 rounded-full flex items-center'
-                title={
-                  mode === "chatbot"
-                    ? "Switch to Search Engine"
-                    : "Switch to Chatbot"
-                }
-              >
-                {mode === "chatbot" ? (
-                  <>
-                    <IoChatbubbleOutline size={20} className='mr-1' />
-                    <span>AI ChatBot Mode</span>
-                  </>
-                ) : (
-                  <>
-                    <IoSearchOutline size={20} className='mr-1' />
-                    <span>AI Search Engine Mode</span>
-                  </>
-                )}
-              </button> */}
-              <NavButtons />
+              <div className='flex items-center space-x-2 sm:space-x-3 md:space-x-4'>
+                {/* <span className='text-secondary dark:text-quaternary'>
+                  Search
+                </span>
+                <ToggleButton mode={mode} onToggle={toggleMode} /> */}
+                <NavButtons />
+              </div>
             </div>
             <div className='relative' ref={menuRef}>
               <button
@@ -296,6 +279,21 @@ const NavButton = ({ icon, onClick, title }) => (
       size: 20,
       className: "sm:w-5 sm:h-5 md:w-6 md:h-6",
     })}
+  </button>
+);
+
+const ToggleButton = ({ mode, onToggle }) => (
+  <button
+    onClick={onToggle}
+    className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors duration-300 focus:outline-none ${
+      mode === "search" ? "bg-primary" : "bg-gray-300 dark:bg-gray-600"
+    }`}
+  >
+    <span
+      className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform duration-300 ${
+        mode === "search" ? "translate-x-7" : ""
+      }`}
+    />
   </button>
 );
 

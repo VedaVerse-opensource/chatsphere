@@ -6,7 +6,7 @@ if (typeof window !== "undefined") {
   exaApiKey = localStorage.getItem("exaApiKey");
 }
 
-async function* exaResponse(content) {
+async function* exaSearch(query) {
   if (!exaApiKey) {
     yield "Exa API key not found. Please set it in the settings.";
     return;
@@ -16,41 +16,27 @@ async function* exaResponse(content) {
     const response = await axios.post(
       "https://api.exa.ai/search",
       {
-        query: content,
-        stream: true,
+        query: query,
       },
       {
         headers: {
           "Content-Type": "application/json",
           "x-api-key": exaApiKey,
         },
-        responseType: "text",
       },
     );
 
-    let buffer = "";
-    for await (const chunk of response.data) {
-      buffer += chunk.toString();
-      let newlineIndex;
-      while ((newlineIndex = buffer.indexOf("\n")) !== -1) {
-        const line = buffer.slice(0, newlineIndex).trim();
-        buffer = buffer.slice(newlineIndex + 1);
-        if (line) {
-          try {
-            const data = JSON.parse(line);
-            if (data.content) {
-              yield data.content;
-            }
-          } catch (parseError) {
-            console.error("Error parsing JSON:", parseError, "Line:", line);
-          }
-        }
+    if (response.data && response.data.results) {
+      for (const result of response.data.results) {
+        yield `Title: ${result.title}\nURL: ${result.url}\nSnippet: ${result.snippet}\n\n`;
       }
+    } else {
+      yield "No results found.";
     }
   } catch (error) {
-    console.error("Error in exaResponse:", error);
-    yield "An error occurred while fetching response from Exa. Please check your API key and try again.";
+    console.error("Error in exaSearch:", error);
+    yield "An error occurred while fetching search results from Exa. Please check your API key and try again.";
   }
 }
 
-export default exaResponse;
+export default exaSearch;
