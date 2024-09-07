@@ -11,7 +11,7 @@ import {
   IoGlobeOutline,
 } from "react-icons/io5";
 
-const Navbar = ({ onModelChange, mode, onModeChange }) => {
+const Navbar = ({ onModelChange, onModeChange, mode: initialMode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,6 +19,7 @@ const Navbar = ({ onModelChange, mode, onModeChange }) => {
   const [lastSearchModel, setLastSearchModel] = useState(
     "Select Search Engine",
   );
+  const [mode, setMode] = useState(initialMode);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -50,11 +51,19 @@ const Navbar = ({ onModelChange, mode, onModeChange }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const storedMode = localStorage.getItem("mode");
+    if (storedMode) {
+      setMode(storedMode);
+      onModeChange(storedMode);
+    }
+  }, [onModeChange]);
+
   const data = [
     {
       label: "Search Engines",
       options: [
-        // { label: "Perplexity", value: "perplexityApiKey", name: "perplexity" },
+        { label: "Perplexity", value: "perplexityApiKey", name: "perplexity" },
         { label: "Exa.ai", value: "exaApiKey", name: "exa" },
       ],
     },
@@ -133,7 +142,9 @@ const Navbar = ({ onModelChange, mode, onModeChange }) => {
 
   const toggleMode = () => {
     const newMode = mode === "chatbot" ? "search" : "chatbot";
+    setMode(newMode);
     onModeChange(newMode);
+    localStorage.setItem("mode", newMode);
     if (newMode === "chatbot") {
       onModelChange(lastChatbotModel);
     } else {
@@ -187,7 +198,7 @@ const Navbar = ({ onModelChange, mode, onModeChange }) => {
               className='text-secondary dark:text-quaternary sm:w-5 sm:h-5 md:w-6 md:h-6'
               title='New Chat'
             />
-            <div className='hidden sm:block w-56 lg:w-64'>
+            <div className='w-56 lg:w-64'>
               <DropdownComponent
                 data={data}
                 placeholder={
@@ -200,11 +211,9 @@ const Navbar = ({ onModelChange, mode, onModeChange }) => {
             </div>
           </div>
           <div className='flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
-            <div className='hidden sm:flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
-              <div className='flex items-center space-x-2 sm:space-x-3 md:space-x-4'>
-                <ToggleButton mode={mode} onToggle={toggleMode} />
-                <NavButtons />
-              </div>
+            <div className='flex items-center space-x-2 sm:space-x-3 md:space-x-4'>
+              <ToggleButton mode={mode} onToggle={toggleMode} />
+              <NavButtons />
             </div>
             <div className='relative' ref={menuRef}>
               <button
@@ -215,30 +224,16 @@ const Navbar = ({ onModelChange, mode, onModeChange }) => {
                 <IoPersonCircleOutline size={32} />
               </button>
               {isMenuOpen && (
-                <div className='absolute right-0 mt-2 w-64 sm:w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10'>
-                  <div className='sm:hidden flex justify-center py-2'>
-                    <NavButtons />
-                  </div>
-                  <div className='sm:hidden px-4 py-2'>
-                    <DropdownComponent
-                      data={data}
-                      placeholder={
-                        mode === "chatbot"
-                          ? "Select Model"
-                          : "Select Search Engine"
-                      }
-                      onSelect={handleModelChange}
-                      isDarkMode={isDarkMode}
-                      mode={mode}
-                    />
-                  </div>
+                <div className='absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10'>
                   <button
                     className='block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
                     onClick={() => setIsDialogOpen(true)}
                   >
                     Settings
                   </button>
-                  {/* Add more menu items as needed */}
+                  <div className='sm:hidden flex justify-center py-2'>
+                    <NavButtons />
+                  </div>
                 </div>
               )}
             </div>
@@ -257,6 +252,7 @@ const NavButtons = () => (
       href='https://github.com/VedaVerse-opensource/chatsphere'
       target='_blank'
       rel='noopener noreferrer'
+      className='inline-block'
     >
       <NavButton
         icon={<IoLogoGithub size={20} />}

@@ -27,8 +27,12 @@ async function* exaSearch(query) {
     );
 
     if (response.data && response.data.results) {
+      yield "Search Results:\n\n";
       for (const result of response.data.results) {
-        yield `Title: ${result.title}\nURL: ${result.url}\nSnippet: ${result.snippet}\n\n`;
+        yield `Title: ${result.title || "No title"}\n`;
+        yield `URL: ${result.url || "#"}\n`;
+        yield `Snippet: ${result.snippet || "No snippet available"}\n\n`;
+        yield "---\n\n";
       }
     } else {
       yield "No results found.";
