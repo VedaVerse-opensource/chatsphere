@@ -38,7 +38,7 @@ const Prompt = ({
         currentChat.messages.reduce((acc, msg, index) => {
           acc[index] = msg;
           return acc;
-        }, {}),
+        }, {})
       );
     } else {
       setResponses([]);
@@ -51,29 +51,45 @@ const Prompt = ({
     setInputText(`Analyzing file: ${file.name}`);
   };
 
-  const handleSend = useCallback(async () => {
-    if (inputText.trim() === "" && !uploadedFile) return;
+  const handleSend = useCallback(async (overrideText, editIndex) => {
+    const textToSend = overrideText || inputText;
+    if (textToSend.trim() === "" && !uploadedFile) return;
 
     if (!chatActive) {
-      onChatStart(inputText);
+      onChatStart(textToSend);
     }
 
     setIsLoading(true);
-    const newUserResponse = { type: "user", text: inputText };
-    setResponses(prev => [...prev, newUserResponse]);
+    const newUserResponse = { type: "user", text: textToSend };
+
+    let updatedResponses;
+    if (editIndex !== undefined) {
+      updatedResponses = responses.slice(0, editIndex + 1);
+      updatedResponses[editIndex] = newUserResponse;
+    } else {
+      updatedResponses = [...responses, newUserResponse];
+    }
+    setResponses(updatedResponses);
+
     setInputText("");
 
-    const updatedContext = { ...context, [responses.length]: newUserResponse };
+    const updatedContext = { ...context };
+    if (editIndex !== undefined) {
+      Object.keys(updatedContext).forEach(key => {
+        if (parseInt(key) > editIndex) {
+          delete updatedContext[key];
+        }
+      });
+    }
+    updatedContext[updatedResponses.length - 1] = newUserResponse;
 
     let responseGenerator;
     try {
       if (uploadedFile) {
-        // Process the uploaded file
         const fileContent = await readFileContent(uploadedFile);
         responseGenerator = processFileContent(fileContent, selectedModel);
       } else {
-        // Use the existing chat models
-        responseGenerator = getChatResponse(inputText, selectedModel);
+        responseGenerator = getChatResponse(textToSend, selectedModel);
       }
 
       let fullContent = "";
@@ -88,34 +104,29 @@ const Prompt = ({
         ]);
       }
 
-      setContext({
-        ...updatedContext,
-        [responses.length + 1]: { ...newAIResponse, text: fullContent },
-      });
+      updatedContext[updatedResponses.length] = { ...newAIResponse, text: fullContent };
+      setContext(updatedContext);
 
       const updatedChat = currentChat
         ? {
             ...currentChat,
             messages: [
-              ...responses,
-              newUserResponse,
+              ...updatedResponses,
               { ...newAIResponse, text: fullContent },
             ],
-            timestamp: Date.now(), // Update timestamp for sorting
+            timestamp: Date.now(),
           }
         : {
-            id: Date.now(), // Add a unique id for new chats
-            title: inputText,
+            id: Date.now(),
+            title: textToSend,
             timestamp: Date.now(),
             messages: [
               newUserResponse,
               { ...newAIResponse, text: fullContent },
             ],
           };
-
       await saveChatHistory(updatedChat);
 
-      // Update chat history in the parent component
       onUpdateChatHistory(updatedChat);
     } catch (error) {
       console.error("Error fetching response:", error);
@@ -138,6 +149,32 @@ const Prompt = ({
     uploadedFile,
     currentChat,
   ]);
+
+  const handleEditPrompt = (index, oldText) => {
+    const newText = prompt("Edit your prompt:", oldText);
+    if (newText && newText !== oldText) {
+      handleSavePrompt(index, newText);
+    }
+  };
+
+  const handleSavePrompt = async (index, newText) => {
+    const updatedResponses = responses.slice(0, index + 1).map((response, i) =>
+      i === index ? { ...response, text: newText } : response
+    );
+    setResponses(updatedResponses);
+    setContext(prevContext => {
+      const newContext = { ...prevContext };
+      Object.keys(newContext).forEach(key => {
+        if (parseInt(key) > index) {
+          delete newContext[key];
+        }
+      });
+      return newContext;
+    });
+
+    // Generate new response
+    await handleSend(newText, index);
+  };
 
   const readFileContent = file => {
     return new Promise((resolve, reject) => {
@@ -192,7 +229,11 @@ const Prompt = ({
 
   return (
     <div className='flex flex-col justify-center items-center w-full max-w-3xl mx-auto my-6 sm:my-8 md:my-12'>
-      <ChatContainer responses={responses} />
+      <ChatContainer
+        responses={responses}
+        onEditPrompt={handleEditPrompt}
+        onSavePrompt={handleSavePrompt}
+      />
       <ChatInput
         inputText={inputText}
         setInputText={setInputText}
