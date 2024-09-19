@@ -25,7 +25,7 @@ const SearchResult = ({ result }) => (
 
 const ChatContainer = ({ responses }) => {
   return (
-    <div className='w-full max-w-3xl mx-auto'>
+    <div className='w-full max-w-7xl absolute top-20 p-2 mx-auto'>
       {responses.map((response, index) => (
         <div
           key={index}
