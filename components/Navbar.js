@@ -254,7 +254,6 @@ const Navbar = ({
                   >
                     Settings
                   </button>
-                  {/* Add more menu items as needed */}
                 </div>
               )}
             </div>
@@ -279,7 +278,7 @@ const NavButtons = () => (
         title='View ChatSphere on GitHub'
       />
     </a>
-    <NavButton icon={<IoShareOutline size={20} />} title='Share' />
+    {/* <NavButton icon={<IoShareOutline size={20} />} title='Share' /> */}
   </>
 );
 
