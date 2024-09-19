@@ -5,7 +5,11 @@ import Prompt from "@/components/Prompt";
 import Cards from "@/components/Cards";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import { getChatHistory, saveChatHistory } from "@/utils/indexedDB";
+import {
+  getChatHistory,
+  saveChatHistory,
+  deleteChatHistory,
+} from "@/utils/indexedDB";
 
 const Home = () => {
   const [selectedModel, setSelectedModel] = useState(() => {
@@ -77,6 +81,11 @@ const Home = () => {
     setCurrentChat(updatedChat);
   };
 
+  const handleDeleteChat = async id => {
+    await deleteChatHistory(id); // Call the delete function from IndexedDB
+    setChatHistory(prevHistory => prevHistory.filter(chat => chat.id !== id)); // Update local state
+  };
+
   return (
     <div className='flex-grow container px-2 sm:px-4 md:px-6 lg:px-8 flex flex-col'>
       <Navbar
@@ -92,6 +101,7 @@ const Home = () => {
         onClose={() => setIsSidebarOpen(false)}
         chatHistory={chatHistory}
         onChatSelect={handleChatSelect}
+        onDeleteChat={handleDeleteChat}
       />
       {!isChatActive && (
         <>

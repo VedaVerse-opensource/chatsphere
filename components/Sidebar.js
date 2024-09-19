@@ -1,7 +1,13 @@
 import React from "react";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoTrashBin } from "react-icons/io5"; // Import the bin icon
 
-const Sidebar = ({ isOpen, onClose, chatHistory, onChatSelect }) => {
+const Sidebar = ({
+  isOpen,
+  onClose,
+  chatHistory,
+  onChatSelect,
+  onDeleteChat,
+}) => {
   return (
     <div
       className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg transform ${
@@ -23,15 +29,26 @@ const Sidebar = ({ isOpen, onClose, chatHistory, onChatSelect }) => {
         {chatHistory.map((chat, index) => (
           <div
             key={index}
-            className='p-4 border-b dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer'
+            className='p-4 border-b dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex justify-between items-center'
             onClick={() => onChatSelect(chat)}
           >
-            <h3 className='text-sm font-medium text-gray-800 dark:text-gray-200'>
-              {chat.title}
-            </h3>
-            <p className='text-xs text-gray-500 dark:text-gray-400'>
-              {new Date(chat.timestamp).toLocaleString()}
-            </p>
+            <div>
+              <h3 className='text-sm font-medium text-gray-800 dark:text-gray-200'>
+                {chat.title}
+              </h3>
+              <p className='text-xs text-gray-500 dark:text-gray-400'>
+                {new Date(chat.timestamp).toLocaleString()}
+              </p>
+            </div>
+            <button
+              onClick={e => {
+                e.stopPropagation(); // Prevent triggering onChatSelect
+                onDeleteChat(chat.id); // Call the delete function
+              }}
+              className='text-red-500 hover:text-red-700'
+            >
+              <IoTrashBin size={20} /> {/* Use the bin icon here */}
+            </button>
           </div>
         ))}
       </div>
