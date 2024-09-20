@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { UserBubble, AIBubble } from "./ChatBubbles";
 import Image from "next/image";
 
@@ -23,7 +23,7 @@ const SearchResult = ({ result }) => (
   </div>
 );
 
-const ChatContainer = ({ responses }) => {
+const ChatContainer = ({ responses, onEditPrompt, onSavePrompt }) => {
   return (
     <div className='w-full max-w-3xl mx-auto'>
       {responses.map((response, index) => (
@@ -34,18 +34,13 @@ const ChatContainer = ({ responses }) => {
           }`}
         >
           {response.type === "user" ? (
-            <UserBubble text={response.text} />
+            <UserBubble
+              text={response.text}
+              onEdit={() => onEditPrompt(index, response.text)}
+              onSave={(newText) => onSavePrompt(index, newText)}
+            />
           ) : (
             <div className='flex items-end'>
-              {/* <div className='flex-shrink-0 ml-3 mb-1'>
-                <Image
-                  src='/icons/logo.svg'
-                  alt='AI'
-                  width={40}
-                  height={40}
-                  className='rounded-full'
-                />
-              </div> */}
               <div className='flex-grow inline-block rounded-lg p-3 shadow-sm'>
                 {response.text.startsWith("Search Results:") ? (
                   <div>
