@@ -54,7 +54,13 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
-    document.documentElement.classList.toggle("dark", newMode);
+   
+    // if(newMode){
+    //   document.documentElement.classList.add("dark");
+    // }else{
+    //   document.documentElement.classList.remove("dark");
+    // }
+
     localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
@@ -202,3 +208,4 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
 };
 
 export default ApiKeyDialog;
+

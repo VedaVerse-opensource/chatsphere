@@ -26,9 +26,9 @@ const Sidebar = ({
         </button>
       </div>
       <div className='overflow-y-auto h-full'>
-        {chatHistory.map((chat, index) => (
+        {chatHistory.map((chat) => (
           <div
-            key={index}
+            key={chat.id}
             className='p-4 border-b dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex justify-between items-center'
             onClick={() => onChatSelect(chat)}
           >
@@ -41,13 +41,13 @@ const Sidebar = ({
               </p>
             </div>
             <button
-              onClick={e => {
-                e.stopPropagation(); // Prevent triggering onChatSelect
-                onDeleteChat(chat.id); // Call the delete function
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteChat(chat.id);
               }}
               className='text-red-500 hover:text-red-700'
             >
-              <IoTrashBin size={20} /> {/* Use the bin icon here */}
+              <IoTrashBin size={20} />
             </button>
           </div>
         ))}

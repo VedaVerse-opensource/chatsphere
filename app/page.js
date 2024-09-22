@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Prompt from "@/components/Prompt";
 import Cards from "@/components/Cards";
@@ -23,14 +23,37 @@ const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [chatHistory, setChatHistory] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  const fetchedRef = useRef(false);
+  const initialFetchDone = useRef(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined' || initialFetchDone.current) return;
+
     const fetchChatHistory = async () => {
-      const history = await getChatHistory();
-      const sortedHistory = history.sort((a, b) => b.timestamp - a.timestamp);
-      setChatHistory(sortedHistory);
+      if (fetchedRef.current) return;
+      console.log("fetchChatHistory called");
+      try {
+        fetchedRef.current = true;
+        const history = await getChatHistory();
+        const sortedHistory = history.sort((a, b) => b.timestamp - a.timestamp);
+        setChatHistory(sortedHistory);
+      } catch (error) {
+        console.error("Error fetching chat history:", error);
+      }
     };
+
     fetchChatHistory();
+    initialFetchDone.current = true;
+
+    return () => {
+      fetchedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsMounted(true);
   }, []);
 
   const handleModelChange = model => {
@@ -50,16 +73,19 @@ const Home = () => {
   };
 
   const handleChatStart = async title => {
+    console.log("handleChatStart called");
     setIsChatActive(true);
     const newChat = {
+      id: Date.now(),
       title,
       timestamp: Date.now(),
       messages: [],
     };
+    setChatHistory(prevHistory => [newChat, ...prevHistory]);
     await saveChatHistory(newChat);
-    setChatHistory([...chatHistory, newChat]);
+    console.log("newChat saved");
   };
-
+  
   const handleNewChat = () => {
     setIsChatActive(false);
     setCurrentChat(null);
@@ -85,6 +111,10 @@ const Home = () => {
     await deleteChatHistory(id); // Call the delete function from IndexedDB
     setChatHistory(prevHistory => prevHistory.filter(chat => chat.id !== id)); // Update local state
   };
+
+  if (!isMounted) {
+    return null; // or a loading indicator
+  }
 
   return (
     <div className='flex-grow container px-2 sm:px-4 md:px-6 lg:px-8 flex flex-col'>

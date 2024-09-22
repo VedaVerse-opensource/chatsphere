@@ -34,15 +34,8 @@ const Prompt = ({
   useEffect(() => {
     if (currentChat) {
       setResponses(currentChat.messages);
-      setContext(
-        currentChat.messages.reduce((acc, msg, index) => {
-          acc[index] = msg;
-          return acc;
-        }, {})
-      );
     } else {
       setResponses([]);
-      setContext({});
     }
   }, [currentChat]);
 
@@ -54,10 +47,6 @@ const Prompt = ({
   const handleSend = useCallback(async (overrideText, editIndex) => {
     const textToSend = overrideText || inputText;
     if (textToSend.trim() === "" && !uploadedFile) return;
-
-    if (!chatActive) {
-      onChatStart(textToSend);
-    }
 
     setIsLoading(true);
     const newUserResponse = { type: "user", text: textToSend };
@@ -125,8 +114,12 @@ const Prompt = ({
               { ...newAIResponse, text: fullContent },
             ],
           };
-      await saveChatHistory(updatedChat);
 
+      if (!currentChat) {
+        onChatStart(updatedChat.title);
+      }
+
+      await saveChatHistory(updatedChat);
       onUpdateChatHistory(updatedChat);
     } catch (error) {
       console.error("Error fetching response:", error);
@@ -139,16 +132,7 @@ const Prompt = ({
       setIsLoading(false);
       setUploadedFile(null);
     }
-  }, [
-    inputText,
-    selectedModel,
-    chatActive,
-    onChatStart,
-    context,
-    responses,
-    uploadedFile,
-    currentChat,
-  ]);
+  }, [inputText, responses, context, uploadedFile, selectedModel, currentChat, onChatStart, onUpdateChatHistory]);
 
   const handleEditPrompt = (index, oldText) => {
     const newText = prompt("Edit your prompt:", oldText);
