@@ -7,7 +7,7 @@ import {
   IoStarOutline,
 } from "react-icons/io5";
 
-const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect }) => {
+const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect, savedPrompts, onSelectPrompt }) => {
   const [groqKey, setGroqKey] = useState("");
   const [openAiKey, setOpenAiKey] = useState("");
   const [geminiKey, setGeminiKey] = useState("");
@@ -141,7 +141,10 @@ const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect }) => {
               )}
               <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
             </button>
-            <button className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'>
+            <button
+              className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'
+              onClick={() => setActiveSection("savedPrompts")}
+            >
               <IoDocumentTextOutline size={20} />
               <span>Saved Prompts</span>
             </button>
@@ -196,6 +199,37 @@ const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect }) => {
           <p className='text-sm sm:text-md text-gray-700 dark:text-gray-300'>
             Updating soon!!
           </p>
+        </div>
+      );
+    }
+    if (activeSection === "savedPrompts") {
+      return (
+        <div className='p-4 sm:p-6 md:p-8 h-full overflow-y-auto'>
+          <h2 className='text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 whitespace-nowrap text-primary'>
+            Saved Prompts
+          </h2>
+          {savedPrompts.length > 0 ? (
+            <ul className='space-y-2'>
+              {savedPrompts.map((prompt, index) => (
+                <li
+                  key={index}
+                  className='p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer'
+                  onClick={() => {
+                    onSelectPrompt(prompt);
+                    onClose();
+                  }}
+                >
+                  <p className='text-sm text-gray-800 dark:text-gray-200 truncate'>
+                    {prompt}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className='text-sm text-gray-600 dark:text-gray-400'>
+              No saved prompts yet.
+            </p>
+          )}
         </div>
       );
     }

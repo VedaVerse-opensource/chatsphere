@@ -27,6 +27,7 @@ const Home = () => {
   const [currentChat, setCurrentChat] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
   const [isApiKeyDialogOpen, setIsApiKeyDialogOpen] = useState(false);
+  const [savedPrompts, setSavedPrompts] = useState([]);
 
   const fetchedRef = useRef(false);
   const initialFetchDone = useRef(false);
@@ -127,6 +128,15 @@ const Home = () => {
 
   const favoritedChats = chatHistory.filter(chat => chat.isFavorite);
 
+  const handleSavePrompt = (prompt) => {
+    setSavedPrompts((prevPrompts) => [...new Set([...prevPrompts, prompt])]);
+  };
+
+  const handleSelectPrompt = (prompt) => {
+    // This function will be passed down to the Prompt component
+    // to set the selected prompt in the input field
+  };
+
   if (!isMounted) {
     return null; // or a loading indicator
   }
@@ -158,6 +168,8 @@ const Home = () => {
         onClose={() => setIsApiKeyDialogOpen(false)}
         favoritedChats={favoritedChats}
         onChatSelect={handleChatSelect}
+        savedPrompts={savedPrompts}
+        onSelectPrompt={handleSelectPrompt}
       />
       {!isChatActive && (
         <>
@@ -185,6 +197,9 @@ const Home = () => {
           onChatStart={handleChatStart}
           currentChat={currentChat}
           onUpdateChatHistory={handleUpdateChatHistory}
+          savedPrompts={savedPrompts}
+          onSavePrompt={handleSavePrompt}
+          onSelectPrompt={handleSelectPrompt}
         />
       </div>
     </div>

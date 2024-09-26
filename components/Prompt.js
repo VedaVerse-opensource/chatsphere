@@ -24,6 +24,9 @@ const Prompt = ({
   onChatStart,
   currentChat,
   onUpdateChatHistory,
+  savedPrompts,
+  onSavePrompt,
+  onSelectPrompt,
 }) => {
   const [inputText, setInputText] = useState("");
   const [responses, setResponses] = useState([]);
@@ -141,23 +144,27 @@ const Prompt = ({
     }
   };
 
-  const handleSavePrompt = async (index, newText) => {
-    const updatedResponses = responses.slice(0, index + 1).map((response, i) =>
-      i === index ? { ...response, text: newText } : response
-    );
-    setResponses(updatedResponses);
-    setContext(prevContext => {
-      const newContext = { ...prevContext };
-      Object.keys(newContext).forEach(key => {
-        if (parseInt(key) > index) {
-          delete newContext[key];
-        }
-      });
-      return newContext;
-    });
+  // const handleSavePrompt = async (index, newText) => {
+  //   const updatedResponses = responses.slice(0, index + 1).map((response, i) =>
+  //     i === index ? { ...response, text: newText } : response
+  //   );
+  //   setResponses(updatedResponses);
+  //   setContext(prevContext => {
+  //     const newContext = { ...prevContext };
+  //     Object.keys(newContext).forEach(key => {
+  //       if (parseInt(key) > index) {
+  //         delete newContext[key];
+  //       }
+  //     });
+  //     return newContext;
+  //   });
 
-    // Generate new response
-    await handleSend(newText, index);
+  //   // Generate new response
+  //   await handleSend(newText, index);
+  // };
+
+  const handleSavePrompt = (prompt) => {
+    onSavePrompt(prompt);
   };
 
   const readFileContent = file => {
@@ -224,9 +231,11 @@ const Prompt = ({
         handleSend={handleSend}
         isLoading={isLoading}
         onFileSelect={handleFileSelect}
+        onSavePrompt={handleSavePrompt}
       />
     </div>
   );
 };
+
 
 export default Prompt;
