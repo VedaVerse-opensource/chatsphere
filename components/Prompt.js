@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, forwardRef, useImperativeHandle } from "react";
 import groqResponse from "../scripts/groq";
 import {
   gpt4Response,
@@ -18,7 +18,7 @@ import { perplexityResponse, perplexitySearch } from "../scripts/perplexity";
 import exaSearch from "../scripts/exa";
 import { saveChatHistory } from "@/utils/indexedDB";
 
-const Prompt = ({
+const Prompt = forwardRef(({
   selectedModel,
   chatActive,
   onChatStart,
@@ -27,7 +27,7 @@ const Prompt = ({
   savedPrompts,
   onSavePrompt,
   onSelectPrompt,
-}) => {
+}, ref) => {
   const [inputText, setInputText] = useState("");
   const [responses, setResponses] = useState([]);
   const [context, setContext] = useState({});
@@ -49,7 +49,7 @@ const Prompt = ({
 
   const handleSend = useCallback(async (overrideText, editIndex) => {
     const textToSend = overrideText || inputText;
-    if (textToSend.trim() === "" && !uploadedFile) return;
+    if (typeof textToSend !== 'string' || (textToSend.trim() === "" && !uploadedFile)) return;
 
     setIsLoading(true);
     const newUserResponse = { type: "user", text: textToSend };
@@ -218,6 +218,10 @@ const Prompt = ({
     }
   };
 
+  useImperativeHandle(ref, () => ({
+    setInputText: (text) => setInputText(text),
+  }));
+
   return (
     <div className='flex flex-col justify-center items-center w-full max-w-3xl mx-auto my-6 sm:my-8 md:my-12'>
       <ChatContainer
@@ -235,7 +239,7 @@ const Prompt = ({
       />
     </div>
   );
-};
+});
 
 
 export default Prompt;

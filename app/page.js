@@ -11,6 +11,8 @@ import {
   saveChatHistory,
   deleteChatHistory,
   updateChatHistory,
+  savePrompt,
+  getSavedPrompts
 } from "@/utils/indexedDB";
 
 const Home = () => {
@@ -31,24 +33,28 @@ const Home = () => {
 
   const fetchedRef = useRef(false);
   const initialFetchDone = useRef(false);
+  const promptRef = useRef(null);
 
   useEffect(() => {
     if (typeof window === 'undefined' || initialFetchDone.current) return;
 
-    const fetchChatHistory = async () => {
+    const fetchData = async () => {
       if (fetchedRef.current) return;
-      console.log("fetchChatHistory called");
+      console.log("fetchData called");
       try {
         fetchedRef.current = true;
         const history = await getChatHistory();
         const sortedHistory = history.sort((a, b) => b.timestamp - a.timestamp);
         setChatHistory(sortedHistory);
+
+        const prompts = await getSavedPrompts();
+        setSavedPrompts(prompts);
       } catch (error) {
-        console.error("Error fetching chat history:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchChatHistory();
+    fetchData();
     initialFetchDone.current = true;
 
     return () => {
@@ -128,13 +134,17 @@ const Home = () => {
 
   const favoritedChats = chatHistory.filter(chat => chat.isFavorite);
 
-  const handleSavePrompt = (prompt) => {
-    setSavedPrompts((prevPrompts) => [...new Set([...prevPrompts, prompt])]);
+  const handleSavePrompt = async (prompt) => {
+    if (!savedPrompts.includes(prompt)) {
+      await savePrompt(prompt);
+      setSavedPrompts((prevPrompts) => [...prevPrompts, prompt]);
+    }
   };
 
   const handleSelectPrompt = (prompt) => {
-    // This function will be passed down to the Prompt component
-    // to set the selected prompt in the input field
+    if (promptRef.current) {
+      promptRef.current.setInputText(prompt);
+    }
   };
 
   if (!isMounted) {
@@ -192,6 +202,7 @@ const Home = () => {
       )}
       <div className='w-full h-full px-2 sm:px-4 md:px-6 lg:px-8'>
         <Prompt
+          ref={promptRef}
           selectedModel={selectedModel}
           chatActive={isChatActive}
           onChatStart={handleChatStart}
