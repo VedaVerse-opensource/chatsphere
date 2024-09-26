@@ -74,8 +74,11 @@ const ChatInput = ({
         className={`bg-primary hover:bg-primary/80 text-white rounded-full p-2 sm:p-3 transition-colors ml-2 ${
           isLoading ? "opacity-50 cursor-not-allowed" : ""
         }`}
-        onClick={handleSend}
-        disabled={isLoading}
+        onClick={(e) => {
+          e.preventDefault();
+          handleSend();
+        }}
+        disabled={isLoading || !inputText.trim()}
       >
         {isLoading ? (
           <div className='w-4 h-4 sm:w-5 sm:h-5 border-t-2 border-white rounded-full animate-spin'></div>
