@@ -10,6 +10,7 @@ import {
   IoLogoGithub,
   IoGlobeOutline,
   IoAddCircleOutline,
+  IoStarOutline,
 } from "react-icons/io5";
 
 const Navbar = ({
@@ -18,9 +19,14 @@ const Navbar = ({
   onModeChange,
   onSidebarToggle,
   onNewChat,
+  favoritedChats,
+  onOpenApiKeyDialog,
+  handleChatSelect,
+  isApiKeyDialogOpen,
+  setIsApiKeyDialogOpen,
 }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastChatbotModel, setLastChatbotModel] = useState("Select Model");
   const [lastSearchModel, setLastSearchModel] = useState(
@@ -219,7 +225,7 @@ const Navbar = ({
             <div className='hidden sm:flex items-center space-x-1 sm:space-x-2 md:space-x-3'>
               <div className='flex items-center space-x-2 sm:space-x-3 md:space-x-4'>
                 <ToggleButton mode={mode} onToggle={toggleMode} />
-                <NavButtons />
+                <NavButtons onOpenApiKeyDialog={onOpenApiKeyDialog} />
               </div>
             </div>
             <div className='relative' ref={menuRef}>
@@ -233,7 +239,7 @@ const Navbar = ({
               {isMenuOpen && (
                 <div className='absolute right-0 mt-2 w-64 sm:w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10'>
                   <div className='sm:hidden flex justify-center py-2'>
-                    <NavButtons />
+                    <NavButtons onOpenApiKeyDialog={onOpenApiKeyDialog} />
                   </div>
                   <div className='sm:hidden px-4 py-2'>
                     <DropdownComponent
@@ -250,7 +256,7 @@ const Navbar = ({
                   </div>
                   <button
                     className='block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    onClick={() => setIsDialogOpen(true)}
+                    onClick={() => setIsApiKeyDialogOpen(true)}
                   >
                     Settings
                   </button>
@@ -261,12 +267,17 @@ const Navbar = ({
         </div>
       </div>
 
-      <ApiKeyDialog isOpen={isDialogOpen} onClose={handleDialogClose} />
+      <ApiKeyDialog
+        isOpen={isApiKeyDialogOpen}
+        onClose={() => setIsApiKeyDialogOpen(false)}
+        favoritedChats={favoritedChats}
+        onChatSelect={handleChatSelect}
+      />
     </nav>
   );
 };
 
-const NavButtons = () => (
+const NavButtons = ({ onOpenApiKeyDialog }) => (
   <>
     <a
       href='https://github.com/VedaVerse-opensource/chatsphere'
@@ -278,7 +289,11 @@ const NavButtons = () => (
         title='View ChatSphere on GitHub'
       />
     </a>
-    {/* <NavButton icon={<IoShareOutline size={20} />} title='Share' /> */}
+    {/* <NavButton
+      icon={<IoStarOutline size={20} />}
+      onClick={onOpenApiKeyDialog}
+      title='Favorite Chats'
+    /> */}
   </>
 );
 

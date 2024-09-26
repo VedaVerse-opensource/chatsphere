@@ -1,4 +1,4 @@
-import { IoClose, IoTrashBin, IoChatbubbleEllipses } from 'react-icons/io5';
+import { IoClose, IoTrashBin, IoChatbubbleEllipses, IoStar, IoStarOutline } from 'react-icons/io5';
 
 const Sidebar = ({
   isOpen,
@@ -6,6 +6,7 @@ const Sidebar = ({
   chatHistory,
   onChatSelect,
   onDeleteChat,
+  onToggleFavorite,
 }) => {
   return (
     <div
@@ -41,15 +42,30 @@ const Sidebar = ({
                   {new Date(chat.timestamp).toLocaleString()}
                 </p>
               </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeleteChat(chat.id);
-                }}
-                className='text-gray-400 hover:text-red-500 transition-colors duration-200 flex-shrink-0 ml-2'
-              >
-                <IoTrashBin size={16} />
-              </button>
+              <div className='flex items-center'>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFavorite(chat.id);
+                  }}
+                  className='text-gray-400 hover:text-yellow-500 transition-colors duration-200 flex-shrink-0 mr-2'
+                >
+                  {chat.isFavorite ? (
+                    <IoStar size={16} className="text-yellow-500" />
+                  ) : (
+                    <IoStarOutline size={16} />
+                  )}
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteChat(chat.id);
+                  }}
+                  className='text-gray-400 hover:text-red-500 transition-colors duration-200 flex-shrink-0'
+                >
+                  <IoTrashBin size={16} />
+                </button>
+              </div>
             </div>
           </div>
         ))}

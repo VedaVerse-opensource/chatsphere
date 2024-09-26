@@ -5,10 +5,12 @@ import Prompt from "@/components/Prompt";
 import Cards from "@/components/Cards";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import ApiKeyDialog from "@/components/ApiKeyDialog";
 import {
   getChatHistory,
   saveChatHistory,
   deleteChatHistory,
+  updateChatHistory,
 } from "@/utils/indexedDB";
 
 const Home = () => {
@@ -24,6 +26,7 @@ const Home = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [isApiKeyDialogOpen, setIsApiKeyDialogOpen] = useState(false);
 
   const fetchedRef = useRef(false);
   const initialFetchDone = useRef(false);
@@ -55,6 +58,7 @@ const Home = () => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
 
   const handleModelChange = model => {
     setSelectedModel(model);
@@ -112,6 +116,17 @@ const Home = () => {
     setChatHistory(prevHistory => prevHistory.filter(chat => chat.id !== id)); // Update local state
   };
 
+  const handleToggleFavorite = async (chatId) => {
+    const updatedHistory = chatHistory.map(chat => 
+      chat.id === chatId ? { ...chat, isFavorite: !chat.isFavorite } : chat
+    );
+    setChatHistory(updatedHistory);
+    const chatToUpdate = updatedHistory.find(chat => chat.id === chatId);
+    await updateChatHistory(chatId, chatToUpdate);
+  };
+
+  const favoritedChats = chatHistory.filter(chat => chat.isFavorite);
+
   if (!isMounted) {
     return null; // or a loading indicator
   }
@@ -125,6 +140,10 @@ const Home = () => {
         onModeChange={handleModeChange}
         onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
         onNewChat={handleNewChat}
+        onOpenApiKeyDialog={() => setIsApiKeyDialogOpen(true)}
+        handleChatSelect={handleChatSelect}
+        isApiKeyDialogOpen={isApiKeyDialogOpen}
+        setIsApiKeyDialogOpen={setIsApiKeyDialogOpen}
       />
       <Sidebar
         isOpen={isSidebarOpen}
@@ -132,6 +151,13 @@ const Home = () => {
         chatHistory={chatHistory}
         onChatSelect={handleChatSelect}
         onDeleteChat={handleDeleteChat}
+        onToggleFavorite={handleToggleFavorite}
+      />
+      <ApiKeyDialog
+        isOpen={isApiKeyDialogOpen}
+        onClose={() => setIsApiKeyDialogOpen(false)}
+        favoritedChats={favoritedChats}
+        onChatSelect={handleChatSelect}
       />
       {!isChatActive && (
         <>
@@ -164,5 +190,6 @@ const Home = () => {
     </div>
   );
 };
+
 
 export default Home;

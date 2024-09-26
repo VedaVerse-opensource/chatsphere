@@ -7,7 +7,7 @@ import {
   IoStarOutline,
 } from "react-icons/io5";
 
-const ApiKeyDialog = ({ isOpen, onClose }) => {
+const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect }) => {
   const [groqKey, setGroqKey] = useState("");
   const [openAiKey, setOpenAiKey] = useState("");
   const [geminiKey, setGeminiKey] = useState("");
@@ -145,11 +145,45 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
               <IoDocumentTextOutline size={20} />
               <span>Saved Prompts</span>
             </button>
-            <button className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'>
+            {/* <button className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'>
               <IoStarOutline size={20} />
               <span>Favorites</span>
-            </button>
+            </button> */}
           </div>
+        </div>
+      );
+    }
+    if (activeSection === "favorites") {
+      return (
+        <div className='p-4 sm:p-6 md:p-8 h-full overflow-y-auto'>
+          <h2 className='text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 whitespace-nowrap text-primary'>
+            Favorite Chats
+          </h2>
+          {favoritedChats.length > 0 ? (
+            <ul className='space-y-2'>
+              {favoritedChats.map((chat) => (
+                <li
+                  key={chat.id}
+                  className='p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer'
+                  onClick={() => {
+                    onChatSelect(chat);
+                    onClose();
+                  }}
+                >
+                  <h3 className='text-sm font-medium text-gray-800 dark:text-gray-200'>
+                    {chat.title}
+                  </h3>
+                  <p className='text-xs text-gray-500 dark:text-gray-400'>
+                    {new Date(chat.timestamp).toLocaleString()}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className='text-sm text-gray-600 dark:text-gray-400'>
+              No favorite chats yet.
+            </p>
+          )}
         </div>
       );
     }
@@ -179,6 +213,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
               {[
                 { id: "setApiKeys", label: "Set API Keys" },
                 { id: "settings", label: "Settings" },
+                { id: "favorites", label: "Favorites" },
                 { id: "howToUse", label: "How to Use?" },
               ].map(({ id, label }) => (
                 <button
