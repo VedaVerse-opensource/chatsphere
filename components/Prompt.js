@@ -45,14 +45,22 @@ const Prompt = forwardRef(({
 
   useEffect(() => {
     const checkApiKey = () => {
-      const apiKey = localStorage.getItem(`${selectedModel.toLowerCase()}ApiKey`);
-      if (!apiKey) {
+      const apiKeys = [
+        'groqApiKey',
+        'openAiApiKey',
+        'geminiApiKey',
+        'claudeApiKey',
+        'perplexityApiKey',
+        'exaApiKey'
+      ];
+      const hasAnyApiKey = apiKeys.some(key => localStorage.getItem(key));
+      if (!hasAnyApiKey) {
         setIsApiKeyDialogOpen(true);
       }
     };
 
     checkApiKey();
-  }, [selectedModel, setIsApiKeyDialogOpen]);
+  }, [setIsApiKeyDialogOpen]);
 
   const handleFileSelect = file => {
     setUploadedFile(file);
@@ -60,6 +68,20 @@ const Prompt = forwardRef(({
   };
 
   const handleSend = useCallback(async (overrideText, editIndex) => {
+    const apiKeys = [
+      'groqApiKey',
+      'openAiApiKey',
+      'geminiApiKey',
+      'claudeApiKey',
+      'perplexityApiKey',
+      'exaApiKey'
+    ];
+    const hasAnyApiKey = apiKeys.some(key => localStorage.getItem(key));
+    if (!hasAnyApiKey) {
+      setIsApiKeyDialogOpen(true);
+      return;
+    }
+
     const textToSend = overrideText || inputText;
     if (typeof textToSend !== 'string' || (textToSend.trim() === "" && !uploadedFile)) return;
 
@@ -147,7 +169,7 @@ const Prompt = forwardRef(({
       setIsLoading(false);
       setUploadedFile(null);
     }
-  }, [inputText, responses, context, uploadedFile, selectedModel, currentChat, onChatStart, onUpdateChatHistory]);
+  }, [inputText, responses, context, uploadedFile, selectedModel, currentChat, onChatStart, onUpdateChatHistory, setIsApiKeyDialogOpen]);
 
   const handleEditPrompt = (index, oldText) => {
     const newText = prompt("Edit your prompt:", oldText);
@@ -155,25 +177,6 @@ const Prompt = forwardRef(({
       handleSavePrompt(index, newText);
     }
   };
-
-  // const handleSavePrompt = async (index, newText) => {
-  //   const updatedResponses = responses.slice(0, index + 1).map((response, i) =>
-  //     i === index ? { ...response, text: newText } : response
-  //   );
-  //   setResponses(updatedResponses);
-  //   setContext(prevContext => {
-  //     const newContext = { ...prevContext };
-  //     Object.keys(newContext).forEach(key => {
-  //       if (parseInt(key) > index) {
-  //         delete newContext[key];
-  //       }
-  //     });
-  //     return newContext;
-  //   });
-
-  //   // Generate new response
-  //   await handleSend(newText, index);
-  // };
 
   const handleSavePrompt = (prompt) => {
     onSavePrompt(prompt);
