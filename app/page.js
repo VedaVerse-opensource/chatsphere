@@ -12,9 +12,16 @@ import {
   deleteChatHistory,
   updateChatHistory,
   savePrompt,
-  getSavedPrompts
+  getSavedPrompts,
 } from "@/utils/indexedDB";
-import { initializeOpenAI, initializeGroq, initializeGemini, initializeClaude, initializePerplexity, initializeExa } from "../scripts/api";
+import {
+  initializeOpenAI,
+  initializeGroq,
+  initializeGemini,
+  initializeClaude,
+  initializePerplexity,
+  initializeExa,
+} from "../scripts/api";
 
 const Home = () => {
   const [selectedModel, setSelectedModel] = useState(() => {
@@ -37,7 +44,7 @@ const Home = () => {
   const promptRef = useRef(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || initialFetchDone.current) return;
+    if (typeof window === "undefined" || initialFetchDone.current) return;
 
     const fetchData = async () => {
       if (fetchedRef.current) return;
@@ -70,22 +77,24 @@ const Home = () => {
 
   const handleModelChange = model => {
     setSelectedModel(model);
-    localStorage.setItem("selectedModel", model);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedModel", model);
+    }
     initializeApiClient(model);
   };
 
-  const initializeApiClient = (model) => {
-    if (model.includes('gpt')) {
+  const initializeApiClient = model => {
+    if (model.includes("gpt")) {
       initializeOpenAI();
-    } else if (model.includes('llama')) {
+    } else if (model.includes("llama")) {
       initializeGroq();
-    } else if (model.includes('gemini')) {
+    } else if (model.includes("gemini")) {
       initializeGemini();
-    } else if (model.includes('claude')) {
+    } else if (model.includes("claude")) {
       initializeClaude();
-    } else if (model.includes('mixtral') || model.includes('perplexity')) {
+    } else if (model.includes("mixtral") || model.includes("perplexity")) {
       initializePerplexity();
-    } else if (model.includes('exa')) {
+    } else if (model.includes("exa")) {
       initializeExa();
     }
   };
@@ -112,7 +121,7 @@ const Home = () => {
     await saveChatHistory(newChat);
     console.log("newChat saved");
   };
-  
+
   const handleNewChat = () => {
     setIsChatActive(false);
     setCurrentChat(null);
@@ -139,9 +148,9 @@ const Home = () => {
     setChatHistory(prevHistory => prevHistory.filter(chat => chat.id !== id)); // Update local state
   };
 
-  const handleToggleFavorite = async (chatId) => {
-    const updatedHistory = chatHistory.map(chat => 
-      chat.id === chatId ? { ...chat, isFavorite: !chat.isFavorite } : chat
+  const handleToggleFavorite = async chatId => {
+    const updatedHistory = chatHistory.map(chat =>
+      chat.id === chatId ? { ...chat, isFavorite: !chat.isFavorite } : chat,
     );
     setChatHistory(updatedHistory);
     const chatToUpdate = updatedHistory.find(chat => chat.id === chatId);
@@ -150,14 +159,14 @@ const Home = () => {
 
   const favoritedChats = chatHistory.filter(chat => chat.isFavorite);
 
-  const handleSavePrompt = async (prompt) => {
+  const handleSavePrompt = async prompt => {
     if (!savedPrompts.includes(prompt)) {
       await savePrompt(prompt);
-      setSavedPrompts((prevPrompts) => [...prevPrompts, prompt]);
+      setSavedPrompts(prevPrompts => [...prevPrompts, prompt]);
     }
   };
 
-  const handleSelectPrompt = (prompt) => {
+  const handleSelectPrompt = prompt => {
     if (promptRef.current) {
       promptRef.current.setInputText(prompt);
     }
@@ -233,6 +242,5 @@ const Home = () => {
     </div>
   );
 };
-
 
 export default Home;

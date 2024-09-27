@@ -113,9 +113,9 @@ const Prompt = forwardRef(
         )
           return;
 
-        if (!chatActive) {
-          onChatStart(textToSend);
-        }
+        // if (!chatActive) {
+        //   onChatStart(textToSend);
+        // }
 
         setIsLoading(true);
         const newUserResponse = { type: "user", text: textToSend };
