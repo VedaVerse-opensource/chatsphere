@@ -43,8 +43,8 @@ const DropdownComponent = ({
 
   const handleChange = selectedOption => {
     setSelectedOption(selectedOption);
-    if (onSelect) {
-      onSelect(selectedOption ? selectedOption.name : placeholder);
+    if (onSelect && selectedOption) {
+      onSelect(selectedOption.name);
     }
   };
 

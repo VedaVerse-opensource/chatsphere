@@ -1,6 +1,24 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
+let genAI;
+
+export const initializeGemini = () => {
+  const key = localStorage.getItem("geminiApiKey");
+  if (key) {
+    genAI = new GoogleGenerativeAI(key);
+  } else {
+    console.error("Gemini API key not found in localStorage");
+  }
+};
+
+if (typeof window !== "undefined") {
+  initializeGemini();
+  window.addEventListener("storage", event => {
+    if (event.key === "geminiApiKey") {
+      initializeGemini();
+    }
+  });
+}
 
 async function* geminiResponse(content, model, contextMessages) {
   try {

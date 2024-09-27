@@ -6,8 +6,9 @@ import {
   IoMoonOutline,
   IoStarOutline,
 } from "react-icons/io5";
+import { initializeOpenAI, initializeGroq, initializeGemini, initializeClaude, initializePerplexity, initializeExa } from "../scripts/api";
 
-const ApiKeyDialog = ({ isOpen, onClose }) => {
+const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect, savedPrompts, onSelectPrompt }) => {
   const [groqKey, setGroqKey] = useState("");
   const [openAiKey, setOpenAiKey] = useState("");
   const [geminiKey, setGeminiKey] = useState("");
@@ -47,6 +48,13 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
       localStorage.setItem("claudeKey", claudeKey);
       localStorage.setItem("perplexityApiKey", perplexityKey);
       localStorage.setItem("exaApiKey", exaKey);
+
+      initializeOpenAI();
+      initializeGroq();
+      initializeGemini();
+      initializeClaude();
+      initializePerplexity();
+      initializeExa();
     }
     onClose();
   };
@@ -54,7 +62,13 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
-    document.documentElement.classList.toggle("dark", newMode);
+   
+    // if(newMode){
+    //   document.documentElement.classList.add("dark");
+    // }else{
+    //   document.documentElement.classList.remove("dark");
+    // }
+
     localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
@@ -135,15 +149,52 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
               )}
               <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
             </button>
-            <button className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'>
+            <button
+              className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'
+              onClick={() => setActiveSection("savedPrompts")}
+            >
               <IoDocumentTextOutline size={20} />
               <span>Saved Prompts</span>
             </button>
-            <button className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'>
+            {/* <button className='flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'>
               <IoStarOutline size={20} />
               <span>Favorites</span>
-            </button>
+            </button> */}
           </div>
+        </div>
+      );
+    }
+    if (activeSection === "favorites") {
+      return (
+        <div className='p-4 sm:p-6 md:p-8 h-full overflow-y-auto'>
+          <h2 className='text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 whitespace-nowrap text-primary'>
+            Favorite Chats
+          </h2>
+          {favoritedChats.length > 0 ? (
+            <ul className='space-y-2'>
+              {favoritedChats.map((chat) => (
+                <li
+                  key={chat.id}
+                  className='p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer'
+                  onClick={() => {
+                    onChatSelect(chat);
+                    onClose();
+                  }}
+                >
+                  <h3 className='text-sm font-medium text-gray-800 dark:text-gray-200'>
+                    {chat.title}
+                  </h3>
+                  <p className='text-xs text-gray-500 dark:text-gray-400'>
+                    {new Date(chat.timestamp).toLocaleString()}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className='text-sm text-gray-600 dark:text-gray-400'>
+              No favorite chats yet.
+            </p>
+          )}
         </div>
       );
     }
@@ -156,6 +207,37 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
           <p className='text-sm sm:text-md text-gray-700 dark:text-gray-300'>
             Updating soon!!
           </p>
+        </div>
+      );
+    }
+    if (activeSection === "savedPrompts") {
+      return (
+        <div className='p-4 sm:p-6 md:p-8 h-full overflow-y-auto'>
+          <h2 className='text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 whitespace-nowrap text-primary'>
+            Saved Prompts
+          </h2>
+          {savedPrompts.length > 0 ? (
+            <ul className='space-y-2'>
+              {savedPrompts.map((prompt, index) => (
+                <li
+                  key={index}
+                  className='p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer'
+                  onClick={() => {
+                    onSelectPrompt(prompt);
+                    onClose();
+                  }}
+                >
+                  <p className='text-sm text-gray-800 dark:text-gray-200 truncate'>
+                    {prompt}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className='text-sm text-gray-600 dark:text-gray-400'>
+              No saved prompts yet.
+            </p>
+          )}
         </div>
       );
     }
@@ -173,6 +255,7 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
               {[
                 { id: "setApiKeys", label: "Set API Keys" },
                 { id: "settings", label: "Settings" },
+                { id: "favorites", label: "Favorites" },
                 { id: "howToUse", label: "How to Use?" },
               ].map(({ id, label }) => (
                 <button
@@ -202,3 +285,4 @@ const ApiKeyDialog = ({ isOpen, onClose }) => {
 };
 
 export default ApiKeyDialog;
+

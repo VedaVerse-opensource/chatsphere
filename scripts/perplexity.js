@@ -2,8 +2,20 @@ import axios from "axios";
 
 let perplexityApiKey;
 
-if (typeof window !== "undefined") {
+export const initializePerplexity = () => {
   perplexityApiKey = localStorage.getItem("perplexityApiKey");
+  if (!perplexityApiKey) {
+    console.error("Perplexity API key not found in localStorage");
+  }
+};
+
+if (typeof window !== "undefined") {
+  initializePerplexity();
+  window.addEventListener("storage", event => {
+    if (event.key === "perplexityApiKey") {
+      initializePerplexity();
+    }
+  });
 }
 
 async function* perplexityResponse(content, contextMessages) {
