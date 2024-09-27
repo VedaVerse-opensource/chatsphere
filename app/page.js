@@ -211,6 +211,7 @@ const Home = () => {
           savedPrompts={savedPrompts}
           onSavePrompt={handleSavePrompt}
           onSelectPrompt={handleSelectPrompt}
+          setIsApiKeyDialogOpen={setIsApiKeyDialogOpen}
         />
       </div>
     </div>

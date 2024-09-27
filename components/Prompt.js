@@ -27,6 +27,7 @@ const Prompt = forwardRef(({
   savedPrompts,
   onSavePrompt,
   onSelectPrompt,
+  setIsApiKeyDialogOpen,
 }, ref) => {
   const [inputText, setInputText] = useState("");
   const [responses, setResponses] = useState([]);
@@ -41,6 +42,17 @@ const Prompt = forwardRef(({
       setResponses([]);
     }
   }, [currentChat]);
+
+  useEffect(() => {
+    const checkApiKey = () => {
+      const apiKey = localStorage.getItem(`${selectedModel.toLowerCase()}ApiKey`);
+      if (!apiKey) {
+        setIsApiKeyDialogOpen(true);
+      }
+    };
+
+    checkApiKey();
+  }, [selectedModel, setIsApiKeyDialogOpen]);
 
   const handleFileSelect = file => {
     setUploadedFile(file);

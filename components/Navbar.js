@@ -26,7 +26,7 @@ const Navbar = ({
   setIsApiKeyDialogOpen,
 }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  // const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastChatbotModel, setLastChatbotModel] = useState("Select Model");
   const [lastSearchModel, setLastSearchModel] = useState(
