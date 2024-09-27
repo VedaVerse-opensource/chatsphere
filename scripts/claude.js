@@ -2,6 +2,14 @@
 
 import axios from "axios";
 
+export const initializeClaude = () => {
+  // Claude doesn't require initialization, but we can add error checking here
+  const key = localStorage.getItem("claudeKey");
+  if (!key) {
+    console.error("Claude API key not found in localStorage");
+  }
+};
+
 export async function* getClaudeResponse(prompt, contextMessages) {
   try {
     let apiKey = "";

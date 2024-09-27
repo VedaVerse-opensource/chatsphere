@@ -209,19 +209,14 @@ const Prompt = forwardRef(({
       case "3.5sonnet":
         return getClaudeResponse(content, contextMessages);
       case "gpt-4o":
-        return gpt4oResponse(content, contextMessages);
       case "gpt-4":
-        return gpt4Response(content, contextMessages);
       case "gpt-4o-mini":
-        return gpt4oMiniResponse(content, contextMessages);
       case "gpt-3.5-turbo":
-        return gpt35TurboResponse(content, contextMessages);
+        return chatGPTResponse(content, model, contextMessages);
       case "gemini-1.5-pro":
-        return gemini15ProResponse(content, contextMessages);
       case "gemini-1.5-flash":
-        return gemini15FlashResponse(content, contextMessages);
       case "gemini-1.0-pro":
-        return gemini10ProResponse(content, contextMessages);
+        return geminiResponse(content, model, contextMessages);
       case "mixtral-7b-instruct":
         return perplexityResponse(content, contextMessages);
       case "perplexity":

@@ -4,21 +4,20 @@ import OpenAI from "openai";
 
 let openai;
 
+export const initializeOpenAI = () => {
+  const key = localStorage.getItem("openAiApiKey");
+  if (key) {
+    openai = new OpenAI({
+      apiKey: key,
+      dangerouslyAllowBrowser: true,
+    });
+  } else {
+    console.error("OpenAI API key not found in localStorage");
+  }
+};
+
 // Initialize OpenAI SDK on the client side
 if (typeof window !== "undefined") {
-  const initializeOpenAI = () => {
-    const key = localStorage.getItem("openAiApiKey");
-    if (key) {
-      openai = new OpenAI({
-        apiKey: key,
-        dangerouslyAllowBrowser: true,
-      });
-    } else {
-      console.error("OpenAI API key not found in localStorage");
-    }
-  };
-
-  // Initialize immediately
   initializeOpenAI();
 
   // Re-initialize when localStorage changes

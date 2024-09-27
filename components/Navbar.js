@@ -135,6 +135,7 @@ const Navbar = ({
     } else {
       setLastSearchModel(name);
     }
+    localStorage.setItem("selectedModel", name);
   };
 
   const handleDialogClose = () => {

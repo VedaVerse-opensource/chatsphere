@@ -6,6 +6,7 @@ import {
   IoMoonOutline,
   IoStarOutline,
 } from "react-icons/io5";
+import { initializeOpenAI, initializeGroq, initializeGemini, initializeClaude, initializePerplexity, initializeExa } from "../scripts/api";
 
 const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect, savedPrompts, onSelectPrompt }) => {
   const [groqKey, setGroqKey] = useState("");
@@ -47,6 +48,13 @@ const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect, savedProm
       localStorage.setItem("claudeKey", claudeKey);
       localStorage.setItem("perplexityApiKey", perplexityKey);
       localStorage.setItem("exaApiKey", exaKey);
+
+      initializeOpenAI();
+      initializeGroq();
+      initializeGemini();
+      initializeClaude();
+      initializePerplexity();
+      initializeExa();
     }
     onClose();
   };

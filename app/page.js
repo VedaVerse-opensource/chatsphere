@@ -14,6 +14,7 @@ import {
   savePrompt,
   getSavedPrompts
 } from "@/utils/indexedDB";
+import { initializeOpenAI, initializeGroq, initializeGemini, initializeClaude, initializePerplexity, initializeExa } from "../scripts/api";
 
 const Home = () => {
   const [selectedModel, setSelectedModel] = useState(() => {
@@ -64,13 +65,28 @@ const Home = () => {
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
-
+    initializeApiClient(selectedModel);
+  }, [selectedModel]);
 
   const handleModelChange = model => {
     setSelectedModel(model);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedModel", model);
+    localStorage.setItem("selectedModel", model);
+    initializeApiClient(model);
+  };
+
+  const initializeApiClient = (model) => {
+    if (model.includes('gpt')) {
+      initializeOpenAI();
+    } else if (model.includes('llama')) {
+      initializeGroq();
+    } else if (model.includes('gemini')) {
+      initializeGemini();
+    } else if (model.includes('claude')) {
+      initializeClaude();
+    } else if (model.includes('mixtral') || model.includes('perplexity')) {
+      initializePerplexity();
+    } else if (model.includes('exa')) {
+      initializeExa();
     }
   };
 
