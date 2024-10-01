@@ -111,15 +111,15 @@ const Home = () => {
   const handleChatStart = async title => {
     console.log("handleChatStart called");
     setIsChatActive(true);
-    const newChat = {
-      id: Date.now(),
-      title,
-      timestamp: Date.now(),
-      messages: [],
-    };
-    setChatHistory(prevHistory => [newChat, ...prevHistory]);
-    await saveChatHistory(newChat);
-    console.log("newChat saved");
+    // const newChat = {
+    //   id: Date.now(),
+    //   title,
+    //   timestamp: Date.now(),
+    //   messages: [],
+    // };
+    // setChatHistory(prevHistory => [newChat, ...prevHistory]);
+    // await saveChatHistory(newChat);
+    // console.log("newChat saved");
   };
 
   const handleNewChat = () => {
