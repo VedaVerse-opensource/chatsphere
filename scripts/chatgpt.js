@@ -1,6 +1,6 @@
 "use client";
 
-let azureOpenAiApiKey = localStorage.getItem("openAiApiKey");
+let azureOpenAiApiKey = process.env.NEXT_PUBLIC_AZURE_API_KEY;
 let azureOpenAiEndpoint = "https://vedaverse-openai-api.openai.azure.com/";
 let model_name = "VedaVerse-frontend";
 

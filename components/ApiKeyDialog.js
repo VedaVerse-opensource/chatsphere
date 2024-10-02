@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import Dialog from "./Dialog";
 import {
@@ -35,7 +36,7 @@ const ApiKeyDialog = ({
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedGroqKey = localStorage.getItem("groqApiKey");
-      const storedOpenAiKey = localStorage.getItem("openAiApiKey");
+      // const storedOpenAiKey = localStorage.getItem("openAiApiKey");
       const storedGeminiKey = localStorage.getItem("geminiApiKey");
       const storedClaudeKey = localStorage.getItem("claudeApiKey");
       const storedPerplexityKey = localStorage.getItem("perplexityApiKey");
@@ -43,7 +44,7 @@ const ApiKeyDialog = ({
       const storedTheme = localStorage.getItem("theme");
 
       if (storedGroqKey) setGroqKey(storedGroqKey);
-      if (storedOpenAiKey) setOpenAiKey(storedOpenAiKey);
+      // if (storedOpenAiKey) setOpenAiKey(storedOpenAiKey);
       if (storedGeminiKey) setGeminiKey(storedGeminiKey);
       if (storedClaudeKey) setClaudeKey(storedClaudeKey);
       if (storedPerplexityKey) setPerplexityKey(storedPerplexityKey);
@@ -56,7 +57,7 @@ const ApiKeyDialog = ({
 
   const handleSave = () => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("openAiApiKey", openAiKey);
+      // localStorage.setItem("openAiApiKey", openAiKey);
       localStorage.setItem("geminiApiKey", geminiKey);
       localStorage.setItem("groqApiKey", groqKey);
       localStorage.setItem("claudeKey", claudeKey);
@@ -95,11 +96,11 @@ const ApiKeyDialog = ({
           </h2>
           {[
             { label: "Groq API Key", value: groqKey, onChange: setGroqKey },
-            {
-              label: "OpenAI API Key",
-              value: openAiKey,
-              onChange: setOpenAiKey,
-            },
+            // {
+            //   label: "OpenAI API Key",
+            //   value: openAiKey,
+            //   onChange: setOpenAiKey,
+            // },
             {
               label: "Gemini API Key",
               value: geminiKey,

@@ -1,3 +1,4 @@
+"use client";
 import React, {
   useState,
   useCallback,
@@ -21,7 +22,7 @@ import { getClaudeResponse } from "@/scripts/claude";
 import ChatContainer from "./ChatContainer";
 import ChatInput from "./ChatInput";
 import { perplexityResponse, perplexitySearch } from "../scripts/perplexity";
-import exaSearch from "../scripts/exa";
+import { exaSearch } from "../scripts/exa";
 import { saveChatHistory } from "@/utils/indexedDB";
 
 const Prompt = forwardRef(
@@ -76,7 +77,11 @@ const Prompt = forwardRef(
           "perplexityApiKey",
           "exaApiKey",
         ];
-        const hasAnyApiKey = apiKeys.some(key => localStorage.getItem(key));
+        const hasAnyApiKey = apiKeys.some(key => {
+          if (typeof window === "undefined") {
+            return localStorage.getItem(key);
+          }
+        });
         if (!hasAnyApiKey) {
           setIsApiKeyDialogOpen(true);
         }
