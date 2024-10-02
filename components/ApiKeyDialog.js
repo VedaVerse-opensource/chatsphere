@@ -6,9 +6,23 @@ import {
   IoMoonOutline,
   IoStarOutline,
 } from "react-icons/io5";
-import { initializeOpenAI, initializeGroq, initializeGemini, initializeClaude, initializePerplexity, initializeExa } from "../scripts/api";
+import {
+  initializeOpenAI,
+  initializeGroq,
+  initializeGemini,
+  initializeClaude,
+  initializePerplexity,
+  initializeExa,
+} from "../scripts/api";
 
-const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect, savedPrompts, onSelectPrompt }) => {
+const ApiKeyDialog = ({
+  isOpen,
+  onClose,
+  favoritedChats,
+  onChatSelect,
+  savedPrompts,
+  onSelectPrompt,
+}) => {
   const [groqKey, setGroqKey] = useState("");
   const [openAiKey, setOpenAiKey] = useState("");
   const [geminiKey, setGeminiKey] = useState("");
@@ -62,7 +76,7 @@ const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect, savedProm
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
-   
+
     // if(newMode){
     //   document.documentElement.classList.add("dark");
     // }else{
@@ -112,7 +126,7 @@ const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect, savedProm
                 {label}
               </label>
               <input
-                type='text'
+                type='password'
                 value={value}
                 onChange={e => onChange(e.target.value)}
                 className='w-full p-2 sm:p-3 border rounded-md bg-white dark:bg-gray-800 dark:border-gray-700 text-black dark:text-white text-sm sm:text-base'
@@ -172,7 +186,7 @@ const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect, savedProm
           </h2>
           {favoritedChats.length > 0 ? (
             <ul className='space-y-2'>
-              {favoritedChats.map((chat) => (
+              {favoritedChats.map(chat => (
                 <li
                   key={chat.id}
                   className='p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer'
@@ -285,4 +299,3 @@ const ApiKeyDialog = ({ isOpen, onClose, favoritedChats, onChatSelect, savedProm
 };
 
 export default ApiKeyDialog;
-
