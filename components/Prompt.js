@@ -221,15 +221,15 @@ const Prompt = forwardRef(
     const handleEditPrompt = (index, oldText) => {
       const newText = prompt("Edit your prompt:", oldText);
       if (newText && newText !== oldText) {
-        handleSavePrompt(index, newText);
+        handleSaveEditedPrompt(index, newText);
       }
     };
 
-    // const handleSavePrompt = prompt => {
-    //   onSavePrompt(prompt);
-    // };
+    const handleSavePrompt = prompt => {
+      onSavePrompt(prompt);
+    };
 
-    const handleSavePrompt = async (index, newText) => {
+    const handleSaveEditedPrompt = async (index, newText) => {
       const updatedResponses = responses
         .slice(0, index + 1)
         .map((response, i) =>
@@ -313,7 +313,7 @@ const Prompt = forwardRef(
         <ChatContainer
           responses={responses}
           onEditPrompt={handleEditPrompt}
-          onSavePrompt={handleSavePrompt}
+          onSavePrompt={handleSaveEditedPrompt}
         />
         <ChatInput
           inputText={inputText}
