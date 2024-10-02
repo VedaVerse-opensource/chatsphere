@@ -146,8 +146,8 @@ const Home = () => {
   };
 
   const handleDeleteChat = async id => {
-    await deleteChatHistory(id); // Call the delete function from IndexedDB
-    setChatHistory(prevHistory => prevHistory.filter(chat => chat.id !== id)); // Update local state
+    await deleteChatHistory(id);
+    setChatHistory(prevHistory => prevHistory.filter(chat => chat.id !== id));
   };
 
   const handleToggleFavorite = async chatId => {
