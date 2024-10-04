@@ -65,66 +65,70 @@ const Navbar = ({
   }, []);
 
   const data = [
-    {
-      label: "Search Engines",
-      options: [
-        // { label: "Perplexity", value: "perplexityApiKey", name: "perplexity" },
-        { label: "Exa.ai", value: "exaApiKey", name: "exa" },
-      ],
-    },
-    {
-      label: "Groq",
-      options: [
-        { label: "Llama 70b Versatile", value: "groqApiKey", name: "llama70b" },
-      ],
-    },
-    {
-      label: "Claude",
-      options: [{ label: "3.5 Sonnet", value: "claudeKey", name: "3.5sonnet" }],
-    },
+    // {
+    //   label: "Search Engines",
+    //   options: [
+    //     // { label: "Perplexity", value: "perplexityApiKey", name: "perplexity" },
+    //     { label: "Exa.ai", value: "exaApiKey", name: "exa" },
+    //   ],
+    // },
+    // {
+    //   label: "Groq",
+    //   options: [
+    //     { label: "Llama 70b Versatile", value: "groqApiKey", name: "llama70b" },
+    //   ],
+    // },
+    // {
+    //   label: "Claude",
+    //   options: [{ label: "3.5 Sonnet", value: "claudeKey", name: "3.5sonnet" }],
+    // },
     {
       label: "OpenAI",
       options: [
-        { label: "GPT-4o", value: "openAiApiKey", name: "gpt-4o" },
-        { label: "GPT-4", value: "openAiApiKey", name: "gpt-4" },
-        { label: "GPT-4o mini", value: "openAiApiKey", name: "gpt-4o-mini" },
         {
-          label: "GPT-3.5 Turbo",
+          label: "GPT-4o {No API Key Needed}",
           value: "openAiApiKey",
-          name: "gpt-3.5-turbo",
+          name: "gpt-4o",
         },
+        // { label: "GPT-4", value: "openAiApiKey", name: "gpt-4" },
+        // { label: "GPT-4o mini", value: "openAiApiKey", name: "gpt-4o-mini" },
+        // {
+        //   label: "GPT-3.5 Turbo",
+        //   value: "openAiApiKey",
+        //   name: "gpt-3.5-turbo",
+        // },
       ],
     },
-    {
-      label: "Gemini",
-      options: [
-        {
-          label: "Gemini 1.5 Pro",
-          value: "gemini-1.5-pro",
-          name: "gemini-1.5-pro",
-        },
-        {
-          label: "Gemini 1.5 Flash",
-          value: "gemini-1.5-flash",
-          name: "gemini-1.5-flash",
-        },
-        {
-          label: "Gemini 1.0 Pro",
-          value: "gemini-1.0-pro",
-          name: "gemini-1.0-pro",
-        },
-      ],
-    },
-    {
-      label: "Perplexity",
-      options: [
-        {
-          label: "Mixtral 7B Instruct",
-          value: "perplexityApiKey",
-          name: "mixtral-7b-instruct",
-        },
-      ],
-    },
+    // {
+    //   label: "Gemini",
+    //   options: [
+    //     {
+    //       label: "Gemini 1.5 Pro",
+    //       value: "gemini-1.5-pro",
+    //       name: "gemini-1.5-pro",
+    //     },
+    //     {
+    //       label: "Gemini 1.5 Flash",
+    //       value: "gemini-1.5-flash",
+    //       name: "gemini-1.5-flash",
+    //     },
+    //     {
+    //       label: "Gemini 1.0 Pro",
+    //       value: "gemini-1.0-pro",
+    //       name: "gemini-1.0-pro",
+    //     },
+    //   ],
+    // },
+    // {
+    //   label: "Perplexity",
+    //   options: [
+    //     {
+    //       label: "Mixtral 7B Instruct",
+    //       value: "perplexityApiKey",
+    //       name: "mixtral-7b-instruct",
+    //     },
+    //   ],
+    // },
   ];
 
   const handleModelChange = name => {
@@ -210,7 +214,7 @@ const Navbar = ({
               />
             </button>
 
-            <div className='hidden sm:block w-56 lg:w-64'>
+            <div className='w-56 lg:w-64'>
               <DropdownComponent
                 data={data}
                 placeholder={
@@ -243,7 +247,7 @@ const Navbar = ({
                     <NavButtons onOpenApiKeyDialog={onOpenApiKeyDialog} />
                   </div>
                   <div className='sm:hidden px-4 py-2'>
-                    <DropdownComponent
+                    {/* <DropdownComponent
                       data={data}
                       placeholder={
                         mode === "chatbot"
@@ -253,7 +257,7 @@ const Navbar = ({
                       onSelect={handleModelChange}
                       isDarkMode={isDarkMode}
                       mode={mode}
-                    />
+                    /> */}
                   </div>
                   <button
                     className='block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
