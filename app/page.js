@@ -46,7 +46,7 @@ const Home = () => {
   useEffect(() => {
     if (typeof window === "undefined" || initialFetchDone.current) return;
 
-    localStorage.setItem("openAiApiKey", "openAiKey");
+    // localStorage.setItem("openAiApiKey", "openAiKey");
 
     const fetchData = async () => {
       if (fetchedRef.current) return;

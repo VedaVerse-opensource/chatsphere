@@ -65,70 +65,70 @@ const Navbar = ({
   }, []);
 
   const data = [
-    // {
-    //   label: "Search Engines",
-    //   options: [
-    //     // { label: "Perplexity", value: "perplexityApiKey", name: "perplexity" },
-    //     { label: "Exa.ai", value: "exaApiKey", name: "exa" },
-    //   ],
-    // },
-    // {
-    //   label: "Groq",
-    //   options: [
-    //     { label: "Llama 70b Versatile", value: "groqApiKey", name: "llama70b" },
-    //   ],
-    // },
-    // {
-    //   label: "Claude",
-    //   options: [{ label: "3.5 Sonnet", value: "claudeKey", name: "3.5sonnet" }],
-    // },
+    {
+      label: "Search Engines",
+      options: [
+        // { label: "Perplexity", value: "perplexityApiKey", name: "perplexity" },
+        { label: "Exa.ai", value: "exaApiKey", name: "exa" },
+      ],
+    },
+    {
+      label: "Groq",
+      options: [
+        { label: "Llama 70b Versatile", value: "groqApiKey", name: "llama70b" },
+      ],
+    },
+    {
+      label: "Claude",
+      options: [{ label: "3.5 Sonnet", value: "claudeKey", name: "3.5sonnet" }],
+    },
     {
       label: "OpenAI",
       options: [
         {
-          label: "GPT-4o {No API Key Needed}",
+          label: "GPT-4o",
           value: "openAiApiKey",
           name: "gpt-4o",
         },
-        // { label: "GPT-4", value: "openAiApiKey", name: "gpt-4" },
-        // { label: "GPT-4o mini", value: "openAiApiKey", name: "gpt-4o-mini" },
-        // {
-        //   label: "GPT-3.5 Turbo",
-        //   value: "openAiApiKey",
-        //   name: "gpt-3.5-turbo",
-        // },
+        { label: "GPT-4", value: "openAiApiKey", name: "gpt-4" },
+        { label: "GPT-4o mini", value: "openAiApiKey", name: "gpt-4o-mini" },
+        {
+          label: "GPT-3.5 Turbo",
+          value: "openAiApiKey",
+          name: "gpt-3.5-turbo",
+        },
       ],
     },
-    // {
-    //   label: "Gemini",
-    //   options: [
-    //     {
-    //       label: "Gemini 1.5 Pro",
-    //       value: "gemini-1.5-pro",
-    //       name: "gemini-1.5-pro",
-    //     },
-    //     {
-    //       label: "Gemini 1.5 Flash",
-    //       value: "gemini-1.5-flash",
-    //       name: "gemini-1.5-flash",
-    //     },
-    //     {
-    //       label: "Gemini 1.0 Pro",
-    //       value: "gemini-1.0-pro",
-    //       name: "gemini-1.0-pro",
-    //     },
-    //   ],
-    // },
-    // {
-    //   label: "Perplexity",
-    //   options: [
-    //     {
-    //       label: "Mixtral 7B Instruct",
-    //       value: "perplexityApiKey",
-    //       name: "mixtral-7b-instruct",
-    //     },
-    //   ],
-    // },
+    {
+      label: "Gemini",
+      options: [
+        {
+          label: "Gemini 1.5 Pro",
+          value: "gemini-1.5-pro",
+          name: "gemini-1.5-pro",
+        },
+        {
+          label: "Gemini 1.5 Flash",
+          value: "gemini-1.5-flash",
+          name: "gemini-1.5-flash",
+        },
+        {
+          label: "Gemini 1.0 Pro",
+          value: "gemini-1.0-pro",
+          name: "gemini-1.0-pro",
+        },
+      ],
+    },
+    {
+      label: "Perplexity",
+      options: [
+        {
+          label: "Mixtral 7B Instruct",
+          value: "perplexityApiKey",
+          name: "mixtral-7b-instruct",
+        },
+      ],
+    },
   ];
 
   const handleModelChange = name => {
