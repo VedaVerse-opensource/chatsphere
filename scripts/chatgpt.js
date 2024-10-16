@@ -152,11 +152,11 @@ export async function* gpt4Response(content, contextMessages) {
 }
 
 export async function* gpt4oResponse(content, contextMessages) {
-  yield* chatGPTResponse(content, "gpt-4-0613", contextMessages);
+  yield* chatGPTResponse(content, "gpt-4o", contextMessages);
 }
 
 export async function* gpt4oMiniResponse(content, contextMessages) {
-  yield* chatGPTResponse(content, "gpt-4-0613", contextMessages);
+  yield* chatGPTResponse(content, "gpt-4o-mini", contextMessages);
 }
 
 export async function* gpt35TurboResponse(content, contextMessages) {

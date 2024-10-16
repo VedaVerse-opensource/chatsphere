@@ -40,11 +40,26 @@ export async function* exaSearch(content) {
 
     if (response.data && response.data.results) {
       yield "Search Results:\n\n";
+      let summary = [];
       for (const result of response.data.results) {
-        yield `Title: ${result.title || "No title"}\n`;
-        yield `URL: ${result.url || "#"}\n`;
-        yield `Snippet: ${result.snippet || "No snippet available"}\n\n`;
+        const title = result.title || "No title";
+        const url = result.url || "#";
+        const snippet = result.snippet || "No snippet available";
+
+        yield `Title: ${title}\n`;
+        yield `URL: ${url}\n`;
+        yield `Snippet: ${snippet}\n\n`;
         yield "---\n\n";
+
+        // Collect titles for summary
+        summary.push(title);
+      }
+
+      // Generate and yield the summary
+      if (summary.length > 0) {
+        yield `Summary of results: ${summary.join(", ")}.`;
+      } else {
+        yield "No results found.";
       }
     } else {
       yield "No results found.";
